@@ -233,6 +233,10 @@ class ButtonHandler implements ActionListener {
   public void actionPerformed(ActionEvent e) {
     String totalResult = null;
     
+    if (e.getActionCommand().equals(OrderManager.EXIT)) {
+      System.exit(1);
+    }
+    
     if (e.getSource() == objOrderManager.getCmbOrderType()) {
       String order = objOrderManager.getOrderType();
       
@@ -252,9 +256,6 @@ class ButtonHandler implements ActionListener {
       
     }
     
-    if (e.getActionCommand().equals(OrderManager.EXIT)) {
-      System.exit(1);
-    }
     if (e.getActionCommand().equals(OrderManager.CREATE_ORDER)
         ) {
       //get input values
