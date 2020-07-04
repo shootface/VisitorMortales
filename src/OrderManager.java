@@ -194,6 +194,17 @@ public class OrderManager extends JFrame {
     frame.setVisible(true);
   }
 
+  public JComboBox getCmbOrderType() {
+    return cmbOrderType;
+  }
+
+   public void displayNewUI(JPanel panel) {
+    panel.removeAll();
+    panel.add(panel);
+    panel.validate();
+    validate();
+  }
+  
   public void setTotalValue(String msg) {
     lblTotalValue.setText(msg);
   }
@@ -217,9 +228,30 @@ public class OrderManager extends JFrame {
 
 class ButtonHandler implements ActionListener {
   OrderManager objOrderManager;
+  UIOrderBuilder builder;
+  
   public void actionPerformed(ActionEvent e) {
     String totalResult = null;
-
+    
+    if (e.getSource() == objOrderManager.getCmbOrderType()) {
+      String order = objOrderManager.getOrderType();
+      
+      if (order.equals("") == false) {
+        BuilderFactory factory = new BuilderFactory();
+        //create an appropriate builder instance
+        builder = factory.getUIBuilder(order);
+        //configure the director with the builder
+        UIOrderDirector director = new UIOrderDirector(builder);
+        //director invokes different builder
+        // methods
+        director.build();
+        //get the final build object
+        JPanel UIObj = builder.getSearchUI();
+        objOrderManager.displayNewUI(UIObj);
+      }
+      
+    }
+    
     if (e.getActionCommand().equals(OrderManager.EXIT)) {
       System.exit(1);
     }
@@ -302,3 +334,18 @@ class ButtonHandler implements ActionListener {
 
 } // End of class ButtonHandler
 
+class BuilderFactory {
+  public UIOrderBuilder getUIBuilder(String str) {
+    UIOrderBuilder builder = null;
+    if (str.equals(OrderManager.CA_ORDER)) {
+      builder = new CalOrderBuilder();
+    } else if (str.equals(OrderManager.NON_CA_ORDER)) {
+      builder = new NonCalOrderBuilder();
+    } else if (str.equals(OrderManager.OVERSEAS_ORDER)) {
+      builder = new OverseasOrderBuilder();
+    } else if (str.equals(OrderManager.CO_ORDER)) {
+      builder = new ColombianOrderBuilder();
+    }
+    return builder;
+  }
+}
