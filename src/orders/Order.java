@@ -10,5 +10,4 @@ public abstract class Order {
       throw new Exception("Invalid Operation. Not Supported");
   }
   public abstract void accept(OrderVisitor v);
-  public abstract double getOrderAmount();
 }
