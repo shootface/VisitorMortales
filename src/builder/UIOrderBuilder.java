@@ -1,6 +1,7 @@
 package builder;
 
 
+import java.util.ArrayList;
 import javax.swing.JPanel;
 
 /*
@@ -18,7 +19,8 @@ public abstract class UIOrderBuilder {
     protected JPanel orderUI;
 
   public abstract void addUIControls();
-  public abstract int getTotal();
+  public abstract String getOrder();
+  
 
   public JPanel getSearchUI() {
     return orderUI;

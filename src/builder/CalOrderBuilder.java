@@ -1,6 +1,8 @@
 package builder;
 
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -19,24 +21,55 @@ public class CalOrderBuilder extends UIOrderBuilder {
 
     JTextField txtOrderAmount = new JTextField(10);
     JTextField txtAdditionalTax = new JTextField(10);
-    JTextField txtAdditionalSH = new JTextField(10);
 
     public void addUIControls() {
         orderUI = new JPanel();
-        
-        JLabel lblOrderType = new JLabel("Order Type:");
+       
         JLabel lblOrderAmount = new JLabel("Order Amount:");
         JLabel lblAdditionalTax = new JLabel("Additional Tax(CA Orders Only):");
-        JLabel lblAdditionalSH = new JLabel("Additional S & H(Overseas Orders Only):");
+        GridBagLayout gridbag = new GridBagLayout();
+        orderUI.setLayout(gridbag);
+        GridBagConstraints gbc = new GridBagConstraints();
 
-        JLabel lblTotal = new JLabel("Result:");
-        JLabel lblTotalValue = new JLabel("Click Create or GetTotal Button");
+        orderUI.add(lblOrderAmount);
+        orderUI.add(lblAdditionalTax);
+        orderUI.add(txtOrderAmount);
+        orderUI.add(txtAdditionalTax);
+
+        gbc.insets.top = 5;
+        gbc.insets.bottom = 5;
+        gbc.insets.left = 5;
+        gbc.insets.right = 5;
+
+//        gbc.anchor = GridBagConstraints.EAST;
+//        gbc.gridx = 0;
+//        gbc.gridy = 0;
+//
+//        gbc.anchor = GridBagConstraints.EAST;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gridbag.setConstraints(lblOrderAmount, gbc);
+        //gbc.anchor = GridBagConstraints.WEST;
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gridbag.setConstraints(txtOrderAmount, gbc);
+
+        //gbc.anchor = GridBagConstraints.EAST;
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gridbag.setConstraints(lblAdditionalTax, gbc);
+        //gbc.anchor = GridBagConstraints.WEST;
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gridbag.setConstraints(txtAdditionalTax, gbc);
+        
         
     }
 
     @Override
-    public int getTotal() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getOrder() {
+        String s = txtOrderAmount.getText()+"."+txtAdditionalTax.getText();
+        return s;
     }
-    
+
 }
