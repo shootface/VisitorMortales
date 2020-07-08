@@ -45,8 +45,9 @@ public class NonCalOrderBuilder extends UIOrderBuilder{
     }
 
     @Override
-    public String getOrder() {
-        String s = txtOrderAmount.getText();
+    public String[] getOrder() {
+        String[] s = new String[1];
+        s[0] = txtOrderAmount.getText();
         return s;
     }
 }

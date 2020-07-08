@@ -60,8 +60,10 @@ public class ColombianOrderBuilder extends UIOrderBuilder{
     }
 
     @Override
-    public String getOrder() {
-        String s = txtOrderAmount.getText()+"."+txtAdditionalSH.getText();
+    public String[] getOrder() {
+        String[] s = new String[2];
+        s[0] = txtOrderAmount.getText();
+        s[1] = txtAdditionalSH.getText();
         return s;
     }
 }

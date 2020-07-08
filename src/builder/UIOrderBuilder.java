@@ -19,7 +19,7 @@ public abstract class UIOrderBuilder {
     protected JPanel orderUI;
 
   public abstract void addUIControls();
-  public abstract String getOrder();
+  public abstract String[] getOrder();
   
 
   public JPanel getSearchUI() {

@@ -2,7 +2,7 @@ package orders;
 
 import principal.OrderVisitor;
 
-public class ColombiaOrder extends Order {
+public class ColombiaOrder implements Order {
   private double orderAmount;
   private double additionalSH;
 

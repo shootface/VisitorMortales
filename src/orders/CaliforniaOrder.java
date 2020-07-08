@@ -2,7 +2,7 @@ package orders;
 
 import principal.OrderVisitor;
 
-public class CaliforniaOrder extends Order {
+public class CaliforniaOrder implements Order {
   private double orderAmount;
   private double additionalTax;
 

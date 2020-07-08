@@ -192,15 +192,6 @@ public class OrderManager extends JFrame {
   public String getOrderType() {
     return (String) cmbOrderType.getSelectedItem();
   }
-//  public String getOrderAmount() {
-//    return txtOrderAmount.getText();
-//  }
-//  public String getTax() {
-//    //return txtAdditionalTax.getText();
-//  }
-//  public String getSH() {
-//    //return txtAdditionalSH.getText();
-//  }
 
 } // End of class OrderManager
 
@@ -239,27 +230,30 @@ class ButtonHandler implements ActionListener {
         ) {
       //get input values
       String orderType = objOrderManager.getOrderType();
-      String orderData = builder.getOrder();
-      String[] orderDataSplit = orderData.split(".");
+      String[] orderData = builder.getOrder();
 
       double dblOrderAmount = 0.0;
       double dblTax = 0.0;
       double dblSH = 0.0;
+      
+      String strOrderAmount = "0.0";
+      String strTax = "0.0";
+      String strSH = "0.0";
+      
+      if(builder instanceof CalOrderBuilder){
+          strOrderAmount = orderData[0];
+          strTax = orderData[1];
+      }else if(builder instanceof ColombianOrderBuilder || builder instanceof OverseasOrderBuilder){
+          strOrderAmount = orderData[0];
+          strSH = orderData[1];
+      }else if(builder instanceof NonCalOrderBuilder){
+          strOrderAmount = orderData[0];
+      }
 
-      if (strOrderAmount.trim().length() == 0) {
-        strOrderAmount = "0.0";
-      }
-      if (strTax.trim().length() == 0) {
-        strTax = "0.0";
-      }
-      if (strSH.trim().length() == 0) {
-        strSH = "0.0";
-      }
-
-//      dblOrderAmount =
-//        new Double(strOrderAmount).doubleValue();
-//      dblTax = new Double(strTax).doubleValue();
-//      dblSH = new Double(strSH).doubleValue();
+      dblOrderAmount =
+        new Double(strOrderAmount).doubleValue();
+      dblTax = new Double(strTax).doubleValue();
+      dblSH = new Double(strSH).doubleValue();
 
       //Create the order
       Order order = createOrder(orderType, dblOrderAmount,
@@ -303,9 +297,9 @@ class ButtonHandler implements ActionListener {
     return null;
   }
 
-  public ArrayList<Double> getOrderData(String s){
-      
-  }
+//  public ArrayList<Double> getOrderData(String s){
+//      
+//  }
   public ButtonHandler() {
   }
   public ButtonHandler(OrderManager inObjOrderManager) {
