@@ -5,6 +5,7 @@
  */
 package orders;
 
+import java.util.Vector;
 import principal.OrderVisitor;
 
 /**
@@ -12,5 +13,15 @@ import principal.OrderVisitor;
  * @author gumo0
  */
 public class HistoryCalOrder extends OrderComponent{
+    Vector orderObjList = new Vector();
+
+    public HistoryCalOrder() {
+    }
     
+    public void addOrder(OrderComponent o) throws Exception{
+        orderObjList.add(o);
+    }
+    public Order getOrder(int i)throws Exception{
+        return (Order) (OrderComponent) orderObjList.elementAt(i);
+    }
 }

@@ -5,11 +5,14 @@
  */
 package orders;
 
+import java.util.Vector;
+
 /**
  *
  * @author gumo0
  */
 public abstract class OrderComponent{
+    
     public void addOrder(Order o) throws Exception{
         throw new Exception("Invalid Operation. Not Supported");
     }
