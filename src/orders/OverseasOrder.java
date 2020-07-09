@@ -2,7 +2,7 @@ package orders;
 
 import principal.OrderVisitor;
 
-public class OverseasOrder implements Order {
+public class OverseasOrder extends Order {
   private double orderAmount;
   private double additionalSH;
 
@@ -22,4 +22,9 @@ public class OverseasOrder implements Order {
   public void accept(OrderVisitor v) {
     v.visit(this);
   }
+
+    @Override
+    public Double getTotal() {
+        return getOrderAmount()+getAdditionalSH();
+    }
 }

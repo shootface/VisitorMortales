@@ -19,4 +19,6 @@ public abstract class OrderComponent{
     public Order getOrder(int i)throws Exception{
         throw new Exception("Invalid Operation. Not Supported");
     }
+    
+    public abstract Double getTotal();
 }

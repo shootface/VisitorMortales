@@ -2,7 +2,7 @@ package orders;
 
 import principal.OrderVisitor;
 
-public class NonCaliforniaOrder implements Order {
+public class NonCaliforniaOrder extends Order {
   private double orderAmount;
 
   public NonCaliforniaOrder() {
@@ -16,4 +16,9 @@ public class NonCaliforniaOrder implements Order {
   public void accept(OrderVisitor v) {
     v.visit(this);
   }
+
+    @Override
+    public Double getTotal() {
+        return getOrderAmount();
+    }
 }

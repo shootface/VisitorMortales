@@ -2,7 +2,7 @@ package orders;
 
 import principal.OrderVisitor;
 
-public class CaliforniaOrder extends OrderComponent implements Order{
+public class CaliforniaOrder extends Order{
   private double orderAmount;
   private double additionalTax;
 
@@ -19,8 +19,15 @@ public class CaliforniaOrder extends OrderComponent implements Order{
   public double getAdditionalTax() {
     return additionalTax;
   }
+  
+  @Override
   public void accept(OrderVisitor v) {
     v.visit(this);
   }
+
+  @Override
+    public Double getTotal() {
+        return getOrderAmount()+getAdditionalTax();
+    }
 }
 

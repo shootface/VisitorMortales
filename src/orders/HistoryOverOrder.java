@@ -5,26 +5,24 @@
  */
 package orders;
 
-import java.util.Iterator;
 import java.util.Vector;
-import principal.OrderVisitor;
 
 /**
  *
  * @author gumo0
  */
-public class HistoryCalOrder extends OrderComponent implements Iterator{
+public class HistoryOverOrder extends OrderComponent{
     
-    Vector orderObjList;
     private static OrderComponent history;
+    Vector orderObjList;
 
-    private HistoryCalOrder() {
+    private HistoryOverOrder() {
         orderObjList = new Vector();
     }
     
     public static OrderComponent getOrderHistory(){
         if(history == null){
-            history = new HistoryCalOrder();
+            history = new HistoryOverOrder();
         }
         return history;
     }
@@ -38,16 +36,6 @@ public class HistoryCalOrder extends OrderComponent implements Iterator{
 
     @Override
     public Double getTotal() {
-        return 0.0;
-    }
-
-    @Override
-    public boolean hasNext() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object next() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

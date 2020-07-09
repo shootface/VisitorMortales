@@ -1,10 +1,5 @@
 package principal;
 
-import orders.Order;
-import orders.CaliforniaOrder;
-import orders.OverseasOrder;
-import orders.NonCaliforniaOrder;
-import orders.ColombiaOrder;
 import builder.UIOrderDirector;
 import builder.UIOrderBuilder;
 import builder.OverseasOrderBuilder;
@@ -18,6 +13,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import com.sun.java.swing.plaf.windows.*;
+import orders.*;
 
 public class OrderManager extends JFrame {
   public static final String newline = "\n";
@@ -41,12 +37,23 @@ public class OrderManager extends JFrame {
   private JLabel lblTotal, lblTotalValue;
 
   private OrderVisitor objVisitor;
+  
+  //Order history
+  private OrderComponent californiaOH;
+  private OrderComponent colombianOH;
+  private OrderComponent noncaliforniaOH;
+  private OrderComponent overseasOH;
 
   public OrderManager() {
     super("Visitor Pattern - Example");
 
     //Create the visitor instance
     objVisitor = new OrderVisitor();
+    //History order
+    californiaOH = HistoryCalOrder.getOrderHistory();
+    colombianOH = HistoryColOrder.getOrderHistory();
+    noncaliforniaOH = HistoryNonCalOrder.getOrderHistory();
+    overseasOH = HistoryOverOrder.getOrderHistory();
 
     cmbOrderType = new JComboBox();
     cmbOrderType.addItem("");
@@ -163,6 +170,28 @@ public class OrderManager extends JFrame {
     pOrderCriteria.validate();
     validate();
   }
+  public boolean saveOrder(Order order, int type){
+      try{
+          switch(type){
+          case 1:
+              californiaOH.addOrder(order);
+              break;
+          case 2:
+              colombianOH.addOrder(order);
+              break;
+          case 3:
+              overseasOH.addOrder(order);
+              break;
+          case 4:
+              noncaliforniaOH.addOrder(order);
+              break;
+         }
+          return true;
+      }catch(Exception e){
+          System.out.println(e);
+          return false;
+      }
+  }
 
   public static void main(String[] args) {
     JFrame frame = new OrderManager();
@@ -240,34 +269,56 @@ class ButtonHandler implements ActionListener {
       String strTax = "0.0";
       String strSH = "0.0";
       
+      int orderT = 0;
+      
       if(builder instanceof CalOrderBuilder){
           strOrderAmount = orderData[0];
           strTax = orderData[1];
-      }else if(builder instanceof ColombianOrderBuilder || builder instanceof OverseasOrderBuilder){
+          orderT = 1;
+      }else if(builder instanceof ColombianOrderBuilder){
           strOrderAmount = orderData[0];
           strSH = orderData[1];
+          orderT = 2;
+      }else if(builder instanceof OverseasOrderBuilder){
+          strOrderAmount = orderData[0];
+          strSH = orderData[1];
+          orderT = 3;
       }else if(builder instanceof NonCalOrderBuilder){
           strOrderAmount = orderData[0];
+          orderT = 4;
       }
 
       dblOrderAmount =
         new Double(strOrderAmount).doubleValue();
       dblTax = new Double(strTax).doubleValue();
       dblSH = new Double(strSH).doubleValue();
+      
+        System.out.println("-----------------------");
+        System.out.println(dblOrderAmount);
+        System.out.println(dblTax);
+        System.out.println(dblSH);
+        System.out.println("-----------------------");
 
       //Create the order
       Order order = createOrder(orderType, dblOrderAmount,
                     dblTax, dblSH);
+      
+      boolean ifsave = objOrderManager.saveOrder(order, orderT);
+      
+      if(ifsave){
+          //Get the Visitor
+        OrderVisitor visitor =
+          objOrderManager.getOrderVisitor();
 
-      //Get the Visitor
-      OrderVisitor visitor =
-        objOrderManager.getOrderVisitor();
+        // accept the visitor instance
+        order.accept(visitor);
 
-      // accept the visitor instance
-      order.accept(visitor);
-
-      objOrderManager.setTotalValue(
-        " Order Created Successfully");
+        objOrderManager.setTotalValue(
+          " Order Created Successfully");
+      }else{
+          objOrderManager.setTotalValue(
+          "Error");
+      }
     }
 
     if (e.getActionCommand().equals(OrderManager.GET_TOTAL)) {
@@ -297,9 +348,6 @@ class ButtonHandler implements ActionListener {
     return null;
   }
 
-//  public ArrayList<Double> getOrderData(String s){
-//      
-//  }
   public ButtonHandler() {
   }
   public ButtonHandler(OrderManager inObjOrderManager) {
