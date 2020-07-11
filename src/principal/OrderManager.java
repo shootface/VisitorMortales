@@ -222,6 +222,25 @@ public class OrderManager extends JFrame {
     return (String) cmbOrderType.getSelectedItem();
   }
 
+    public OrderComponent getCaliforniaOH() {
+        return californiaOH;
+    }
+
+    public OrderComponent getColombianOH() {
+        return colombianOH;
+    }
+
+    public OrderComponent getNoncaliforniaOH() {
+        return noncaliforniaOH;
+    }
+
+    public OrderComponent getOverseasOH() {
+        return overseasOH;
+    }
+  
+  
+  
+
 } // End of class OrderManager
 
 class ButtonHandler implements ActionListener {
@@ -329,6 +348,13 @@ class ButtonHandler implements ActionListener {
                       visitor.getOrderTotal()).toString();
       totalResult = " Orders Total = " + totalResult;
       objOrderManager.setTotalValue(totalResult);
+      /*
+      Iterator orderIter = objOrderManager.getCaliforniaOH().getAllTypeOrder();
+        while (orderIter.hasNext()){
+            Order c = (Order) orderIter.next();
+            System.out.println(c.getTotal());
+        }
+        */
     }
   }
 
