@@ -5,6 +5,8 @@
  */
 package orders;
 
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -12,9 +14,6 @@ import java.util.Vector;
  * @author gumo0
  */
 public class HistoryNonCalOrder extends OrderComponent{
-    
-    private static OrderComponent history;
-    Vector orderObjList;
 
     private HistoryNonCalOrder() {
         orderObjList = new Vector();

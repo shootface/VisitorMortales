@@ -5,6 +5,7 @@
  */
 package orders;
 
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
 import principal.OrderVisitor;
@@ -13,10 +14,7 @@ import principal.OrderVisitor;
  *
  * @author gumo0
  */
-public class HistoryCalOrder extends OrderComponent implements Iterator{
-    
-    Vector orderObjList;
-    private static OrderComponent history;
+public class HistoryCalOrder extends OrderComponent {
 
     private HistoryCalOrder() {
         orderObjList = new Vector();
@@ -41,13 +39,4 @@ public class HistoryCalOrder extends OrderComponent implements Iterator{
         return 0.0;
     }
 
-    @Override
-    public boolean hasNext() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object next() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

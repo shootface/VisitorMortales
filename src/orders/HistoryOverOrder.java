@@ -5,6 +5,8 @@
  */
 package orders;
 
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -12,9 +14,6 @@ import java.util.Vector;
  * @author gumo0
  */
 public class HistoryOverOrder extends OrderComponent{
-    
-    private static OrderComponent history;
-    Vector orderObjList;
 
     private HistoryOverOrder() {
         orderObjList = new Vector();
@@ -38,4 +37,5 @@ public class HistoryOverOrder extends OrderComponent{
     public Double getTotal() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
 }
