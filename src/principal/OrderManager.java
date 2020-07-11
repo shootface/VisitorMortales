@@ -54,7 +54,8 @@ public class OrderManager extends JFrame {
     colombianOH = HistoryColOrder.getOrderHistory();
     noncaliforniaOH = HistoryNonCalOrder.getOrderHistory();
     overseasOH = HistoryOverOrder.getOrderHistory();
-
+    
+    JTabbedPane tabbedPane = new JTabbedPane();
     cmbOrderType = new JComboBox();
     cmbOrderType.addItem("");
     cmbOrderType.addItem(OrderManager.CA_ORDER);
@@ -148,12 +149,19 @@ public class OrderManager extends JFrame {
     gbc.insets.top = 2;
 
     //****************************************************
+    JPanel createOrder = new JPanel();
+    createOrder.add(buttonPanel, BorderLayout.NORTH);
+    createOrder.add(panel,BorderLayout.CENTER);
+    tabbedPane.addTab("Create order", createOrder);
+    
+    //****************************************************
 
     //Add the buttons and the log to the frame
     Container contentPane = getContentPane();
+    contentPane.add(tabbedPane);
 
-    contentPane.add(buttonPanel, BorderLayout.NORTH);
-    contentPane.add(panel,BorderLayout.CENTER);
+    
+    //contentPane.add(panel,BorderLayout.CENTER);
     try {
       UIManager.setLookAndFeel(new WindowsLookAndFeel());
       SwingUtilities.updateComponentTreeUI(
