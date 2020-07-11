@@ -31,7 +31,7 @@ public abstract class OrderComponent{
         return orderObjList.elements();
     }
     
-    public Iterator getAllTypeOrder(String type){
+    public Iterator getAllTypeOrder(){
         return new IteratorOrder(this);
     }
     
