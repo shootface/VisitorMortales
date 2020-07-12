@@ -182,6 +182,7 @@ public class OrderManager extends JFrame {
     pOrderCriteriaHistory = new JPanel();
     //Este panel debe contener los JLabels que se deben crear al iterar sobre la colección
     pOrderContainer = new JPanel();
+    pOrderContainer.add(new JLabel("Orders"));
     pOrderContainer.setLayout(new BoxLayout(pOrderContainer, BoxLayout.PAGE_AXIS));
     
     scOrderHistory = new JScrollPane(pOrderContainer);
@@ -347,6 +348,7 @@ class ButtonHandler implements ActionListener {
         if(e.getSource() == objOrderManager.getCmbOrderType()){
             order = objOrderManager.getOrderType();
         }else if(e.getSource() == objOrderManager.getCmbOrderTypeHistory()){
+            order = objOrderManager.getOrderHistory();
             objOrderManager.listOrderHistory(order);
         }
       if (order.equals("") == false) {
