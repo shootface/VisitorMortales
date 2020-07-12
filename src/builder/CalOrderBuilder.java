@@ -65,7 +65,11 @@ public class CalOrderBuilder extends UIOrderBuilder {
         
         
     }
-
+    
+    public void inicial(String orderAmount, String additionalTax){
+        txtOrderAmount.setText(orderAmount);
+        txtAdditionalTax.setText(additionalTax);
+    }
     @Override
     public String[] getOrder() {
         String[] s = new String[2];

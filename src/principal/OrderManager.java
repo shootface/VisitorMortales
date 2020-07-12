@@ -6,6 +6,7 @@ import builder.OverseasOrderBuilder;
 import builder.NonCalOrderBuilder;
 import builder.ColombianOrderBuilder;
 import builder.CalOrderBuilder;
+import com.sun.imageio.plugins.jpeg.JPEG;
 import java.util.*;
 import java.io.*;
 import java.io.*;
@@ -28,13 +29,11 @@ public class OrderManager extends JFrame {
   public static final String OVERSEAS_ORDER = "Overseas Order";
 
 
-  private JComboBox cmbOrderType;
-  private JPanel pOrderCriteria;
-  //private JTextField txtOrderAmount, txtAdditionalTax,
-  //txtAdditionalSH;
+  private JComboBox cmbOrderType,cmbOrderTypeHistory;
+  private JPanel pOrderCriteria,pOrderCriteriaHistory,pOrderContainer;
   private JLabel lblOrderType;
-  //private JLabel lblAdditionalTax, lblAdditionalSH;
   private JLabel lblTotal, lblTotalValue;
+  private JScrollPane scOrderHistory;
 
   private OrderVisitor objVisitor;
   
@@ -149,13 +148,71 @@ public class OrderManager extends JFrame {
     gbc.insets.top = 2;
 
     //****************************************************
+    //TAB create order
     JPanel createOrder = new JPanel();
-    createOrder.add(buttonPanel, BorderLayout.NORTH);
-    createOrder.add(panel,BorderLayout.CENTER);
-    tabbedPane.addTab("Create order", createOrder);
+    GridBagLayout gridbagCreateOrder = new GridBagLayout();
+    createOrder.setLayout(gridbagCreateOrder);
+    GridBagConstraints gbcCO = new GridBagConstraints();
+    
+    createOrder.add(buttonPanel);
+    createOrder.add(panel);
+    
+    gbcCO.gridx = 0;
+    gbcCO.gridy = 0;
+    gridbagCreateOrder.setConstraints(buttonPanel, gbcCO);
+    gbcCO.gridx = 0;
+    gbcCO.gridy = 1;
+    gridbagCreateOrder.setConstraints(panel, gbcCO);
+    
+   //***************************************************************
+   //TAB Edit order
+    JPanel editOrder = new JPanel();
+    GridBagLayout gridbagEditOrder = new GridBagLayout();
+    editOrder.setLayout(gridbagEditOrder);
+    GridBagConstraints gbcEO = new GridBagConstraints();
+
+    cmbOrderTypeHistory = new JComboBox();
+    cmbOrderTypeHistory.addItem("");
+    cmbOrderTypeHistory.addItem(OrderManager.CA_ORDER);
+    cmbOrderTypeHistory.addItem(OrderManager.NON_CA_ORDER);
+    cmbOrderTypeHistory.addItem(OrderManager.OVERSEAS_ORDER);
+    cmbOrderTypeHistory.addItem(OrderManager.CO_ORDER);
+    cmbOrderTypeHistory.addActionListener(objButtonHandler);
+    
+    pOrderCriteriaHistory = new JPanel();
+    //Este panel debe contener los JLabels que se deben crear al iterar sobre la colección
+    pOrderContainer = new JPanel();
+    pOrderContainer.setLayout(new BoxLayout(pOrderContainer, BoxLayout.PAGE_AXIS));
+    
+    scOrderHistory = new JScrollPane(pOrderContainer);
+    
+    editOrder.add(cmbOrderTypeHistory);
+    editOrder.add(scOrderHistory);
+    editOrder.add(pOrderCriteriaHistory);
+    
+    gbcEO.insets.top = 5;
+    gbcEO.insets.bottom = 0;
+    gbcEO.insets.left = 5;
+    gbcEO.insets.right = 5;
+    
+    gbcEO.gridx = 0;
+    gbcEO.gridy = 0;
+    gridbagEditOrder.setConstraints(cmbOrderTypeHistory, gbcEO);
+    gbcEO.gridx = 0;
+    gbcEO.gridy = 1;
+    gridbagEditOrder.setConstraints(pOrderCriteriaHistory, gbcEO);
+    gbcEO.gridx = 1;
+    gbcEO.gridy = 0;
+    gridbagEditOrder.setConstraints(scOrderHistory, gbcEO);
+    
+    
+    
+
     
     //****************************************************
-
+    // Add tabs 
+    tabbedPane.addTab("Create order", createOrder);
+    tabbedPane.addTab("Edit Order", editOrder);
     //Add the buttons and the log to the frame
     Container contentPane = getContentPane();
     contentPane.add(tabbedPane);
@@ -177,6 +234,12 @@ public class OrderManager extends JFrame {
     pOrderCriteria.add(panel);
     pOrderCriteria.validate();
     validate();
+  }
+  public void displayNewUIHistory(JPanel panel){
+      pOrderCriteriaHistory.removeAll();
+      pOrderCriteriaHistory.add(panel);
+      pOrderCriteriaHistory.validate();
+      validate();
   }
   public boolean saveOrder(Order order, int type){
       try{
@@ -200,7 +263,17 @@ public class OrderManager extends JFrame {
           return false;
       }
   }
-
+  public void listOrderHistory(String orderType){
+      if(orderType.equals(OrderManager.CA_ORDER)){
+          Iterator orderIter = californiaOH.getAllTypeOrder();
+          while (orderIter.hasNext()){
+              Order c = (Order) orderIter.next();
+              JButton order = new JButton("1. "+c.getTotal());
+              order.addActionListener(new ButtonHandler(this));
+              pOrderContainer.add(order);
+          }
+      }
+  }
   public static void main(String[] args) {
     JFrame frame = new OrderManager();
 
@@ -219,6 +292,10 @@ public class OrderManager extends JFrame {
   public JComboBox getCmbOrderType() {
     return cmbOrderType;
   }
+
+    public JComboBox getCmbOrderTypeHistory() {
+        return cmbOrderTypeHistory;
+    }
   
   public void setTotalValue(String msg) {
     lblTotalValue.setText(msg);
@@ -228,6 +305,9 @@ public class OrderManager extends JFrame {
   }
   public String getOrderType() {
     return (String) cmbOrderType.getSelectedItem();
+  }
+  public String getOrderHistory(){
+      return (String) cmbOrderTypeHistory.getSelectedItem();
   }
 
     public OrderComponent getCaliforniaOH() {
@@ -262,9 +342,13 @@ class ButtonHandler implements ActionListener {
       System.exit(1);
     }
     
-    if (e.getSource() == objOrderManager.getCmbOrderType()) {
-      String order = objOrderManager.getOrderType();
-      
+    if (e.getSource() instanceof JComboBox) {
+        String order = "";
+        if(e.getSource() == objOrderManager.getCmbOrderType()){
+            order = objOrderManager.getOrderType();
+        }else if(e.getSource() == objOrderManager.getCmbOrderTypeHistory()){
+            objOrderManager.listOrderHistory(order);
+        }
       if (order.equals("") == false) {
         BuilderFactory factory = new BuilderFactory();
         //create an appropriate builder instance
@@ -277,9 +361,10 @@ class ButtonHandler implements ActionListener {
         //get the final build object
           System.out.println("cambio");
         JPanel UIObj = builder.getSearchUI();
-        objOrderManager.displayNewUI(UIObj);
+        if(e.getSource() == objOrderManager.getCmbOrderType()){
+            objOrderManager.displayNewUI(UIObj);
+        }
       }
-      
     }
     
     if (e.getActionCommand().equals(OrderManager.CREATE_ORDER)
@@ -363,6 +448,25 @@ class ButtonHandler implements ActionListener {
             System.out.println(c.getTotal());
         }
         */
+    }else{
+            //Toma el numero (1,2,3,...) que acompaña al valor total y con eso usando el metodo getElement()
+            //lo obtine de la coleccion y usa el inicial para meter los valores en el builder que se crea
+            String orderPosition = e.getActionCommand();
+            String order = objOrderManager.getOrderHistory();
+            if (order.equals("") == false) {
+            BuilderFactory factory = new BuilderFactory();
+            //create an appropriate builder instance
+            builder = factory.getUIBuilder(order);
+            //configure the director with the builder
+            UIOrderDirector director = new UIOrderDirector(builder);
+            //director invokes different builder
+            // methods
+            director.build();
+            //get the final build object
+              System.out.println("cambio");
+            JPanel UIObj = builder.getSearchUI();
+            objOrderManager.displayNewUIHistory(UIObj);
+        }
     }
   }
 
