@@ -67,8 +67,7 @@ public class CalOrderBuilder extends UIOrderBuilder {
     }
     
     public void inicial(String orderAmount, String additionalTax){
-        txtOrderAmount.setText(orderAmount);
-        txtAdditionalTax.setText(additionalTax);
+        
     }
     @Override
     public String[] getOrder() {
@@ -76,6 +75,11 @@ public class CalOrderBuilder extends UIOrderBuilder {
         s[0] = txtOrderAmount.getText();
         s[1] = txtAdditionalTax.getText();
         return s;
+    }
+
+    public void inicialice(double oa, double tax, double sh) {
+        txtOrderAmount.setText(String.valueOf(oa));
+        txtAdditionalTax.setText(String.valueOf(tax));
     }
 
 }

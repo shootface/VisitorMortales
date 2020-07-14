@@ -65,4 +65,10 @@ public class OverseasOrderBuilder extends UIOrderBuilder{
         s[1] = txtAdditionalSH.getText();
         return s;
     }
+
+    @Override
+    public void inicialice(double oa, double tax, double sh) {
+        txtOrderAmount.setText(String.valueOf(oa));
+        txtAdditionalSH.setText(String.valueOf(sh));
+    }
 }

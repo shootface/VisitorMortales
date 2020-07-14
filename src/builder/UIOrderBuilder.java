@@ -20,7 +20,7 @@ public abstract class UIOrderBuilder {
 
   public abstract void addUIControls();
   public abstract String[] getOrder();
-  
+  public abstract void inicialice(double oa, double tax, double sh);
 
   public JPanel getSearchUI() {
     return orderUI;

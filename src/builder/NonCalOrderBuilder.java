@@ -50,4 +50,9 @@ public class NonCalOrderBuilder extends UIOrderBuilder{
         s[0] = txtOrderAmount.getText();
         return s;
     }
+
+    @Override
+    public void inicialice(double oa, double tax, double sh) {
+        txtOrderAmount.setText(String.valueOf(oa));
+    }
 }

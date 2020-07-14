@@ -6,6 +6,7 @@ import builder.OverseasOrderBuilder;
 import builder.NonCalOrderBuilder;
 import builder.ColombianOrderBuilder;
 import builder.CalOrderBuilder;
+import orders.Order.*;
 import com.sun.imageio.plugins.jpeg.JPEG;
 import java.util.*;
 import java.io.*;
@@ -28,7 +29,8 @@ public class OrderManager extends JFrame {
 
   public static final String OVERSEAS_ORDER = "Overseas Order";
 
-
+  public static final String EDIT_ORDER = "Edit order";
+  
   private JComboBox cmbOrderType,cmbOrderTypeHistory;
   private JPanel pOrderCriteria,pOrderCriteriaHistory,pOrderContainer;
   private JLabel lblOrderType;
@@ -182,14 +184,21 @@ public class OrderManager extends JFrame {
     pOrderCriteriaHistory = new JPanel();
     //Este panel debe contener los JLabels que se deben crear al iterar sobre la colección
     pOrderContainer = new JPanel();
+    
     pOrderContainer.add(new JLabel("Orders"));
     pOrderContainer.setLayout(new BoxLayout(pOrderContainer, BoxLayout.PAGE_AXIS));
     
     scOrderHistory = new JScrollPane(pOrderContainer);
     
+    JButton editOrderButton = new JButton(OrderManager.EDIT_ORDER);
+    editOrderButton.setMnemonic(KeyEvent.VK_E);
+    editOrderButton.addActionListener(objButtonHandler);
+
     editOrder.add(cmbOrderTypeHistory);
     editOrder.add(scOrderHistory);
     editOrder.add(pOrderCriteriaHistory);
+    editOrder.add(editOrderButton);
+    editOrder.add(exitButton);
     
     gbcEO.insets.top = 5;
     gbcEO.insets.bottom = 0;
@@ -206,9 +215,13 @@ public class OrderManager extends JFrame {
     gbcEO.gridy = 0;
     gridbagEditOrder.setConstraints(scOrderHistory, gbcEO);
     
+    gbcEO.gridx = 0;
+    gbcEO.gridy = 2;
+    gridbagEditOrder.setConstraints(editOrderButton, gbcEO);
     
-    
-
+    gbcEO.gridx = 1;
+    gbcEO.gridy = 2;
+    gridbagEditOrder.setConstraints(exitButton, gbcEO);
     
     //****************************************************
     // Add tabs 
@@ -265,15 +278,32 @@ public class OrderManager extends JFrame {
       }
   }
   public void listOrderHistory(String orderType){
+      int i=0;
+      Iterator orderIter = null;
+      pOrderContainer.removeAll();
+      JLabel lblOrder = new JLabel("Orders");
+      pOrderContainer.add(lblOrder);
+      ButtonHandler objButtonHandler = new ButtonHandler(this);
+      
       if(orderType.equals(OrderManager.CA_ORDER)){
-          Iterator orderIter = californiaOH.getAllTypeOrder();
-          while (orderIter.hasNext()){
-              Order c = (Order) orderIter.next();
-              JButton order = new JButton("1. "+c.getTotal());
-              order.addActionListener(new ButtonHandler(this));
-              pOrderContainer.add(order);
-          }
+          orderIter = californiaOH.getAllTypeOrder();
+      } else if(orderType.equals(OrderManager.NON_CA_ORDER)){
+          orderIter = noncaliforniaOH.getAllTypeOrder();   
+      } else if(orderType.equals(OrderManager.OVERSEAS_ORDER)){
+          orderIter = noncaliforniaOH.getAllTypeOrder();   
+      } else if(orderType.equals(OrderManager.CO_ORDER)){
+          orderIter = noncaliforniaOH.getAllTypeOrder();   
       }
+      while (orderIter.hasNext()){
+              i++;
+              Order c = (Order) orderIter.next();
+              System.out.println(c.getTotal()+"hola");
+              JButton order = new JButton(i+"-"+c.getTotal());
+                      
+              order.addActionListener(objButtonHandler);
+              pOrderContainer.add(order);
+      }
+      validate();
   }
   public static void main(String[] args) {
     JFrame frame = new OrderManager();
@@ -293,8 +323,7 @@ public class OrderManager extends JFrame {
   public JComboBox getCmbOrderType() {
     return cmbOrderType;
   }
-
-    public JComboBox getCmbOrderTypeHistory() {
+  public JComboBox getCmbOrderTypeHistory() {
         return cmbOrderTypeHistory;
     }
   
@@ -310,26 +339,23 @@ public class OrderManager extends JFrame {
   public String getOrderHistory(){
       return (String) cmbOrderTypeHistory.getSelectedItem();
   }
-
-    public OrderComponent getCaliforniaOH() {
-        return californiaOH;
-    }
-
-    public OrderComponent getColombianOH() {
-        return colombianOH;
-    }
-
-    public OrderComponent getNoncaliforniaOH() {
-        return noncaliforniaOH;
-    }
-
-    public OrderComponent getOverseasOH() {
-        return overseasOH;
+  
+    public OrderComponent getHistory(String history){
+        OrderComponent o = null;
+        
+        if(history.equals(OrderManager.CA_ORDER)){
+            o = californiaOH;
+        } else if (history.equals(OrderManager.NON_CA_ORDER)){
+            o = noncaliforniaOH;
+        } else if (history.equals(OrderManager.OVERSEAS_ORDER)){
+            o = overseasOH;
+        } else if (history.equals(OrderManager.CO_ORDER)){
+            o = colombianOH;
+        }
+        
+       return o;
     }
   
-  
-  
-
 } // End of class OrderManager
 
 class ButtonHandler implements ActionListener {
@@ -369,8 +395,7 @@ class ButtonHandler implements ActionListener {
       }
     }
     
-    if (e.getActionCommand().equals(OrderManager.CREATE_ORDER)
-        ) {
+    if (e.getActionCommand().equals(OrderManager.CREATE_ORDER)) {
       //get input values
       String orderType = objOrderManager.getOrderType();
       String[] orderData = builder.getOrder();
@@ -450,24 +475,53 @@ class ButtonHandler implements ActionListener {
             System.out.println(c.getTotal());
         }
         */
+    }if (e.getActionCommand().equals(OrderManager.EDIT_ORDER)) {
+      
     }else{
             //Toma el numero (1,2,3,...) que acompaña al valor total y con eso usando el metodo getElement()
             //lo obtine de la coleccion y usa el inicial para meter los valores en el builder que se crea
-            String orderPosition = e.getActionCommand();
-            String order = objOrderManager.getOrderHistory();
-            if (order.equals("") == false) {
-            BuilderFactory factory = new BuilderFactory();
-            //create an appropriate builder instance
-            builder = factory.getUIBuilder(order);
-            //configure the director with the builder
-            UIOrderDirector director = new UIOrderDirector(builder);
-            //director invokes different builder
-            // methods
-            director.build();
-            //get the final build object
-              System.out.println("cambio");
-            JPanel UIObj = builder.getSearchUI();
-            objOrderManager.displayNewUIHistory(UIObj);
+            if(e.getSource() instanceof JButton){
+                String orderPosition = e.getActionCommand();
+                String order = objOrderManager.getOrderHistory();
+                if (order.equals("") == false) {
+                BuilderFactory factory = new BuilderFactory();
+                //create an appropriate builder instance
+                builder = factory.getUIBuilder(order);
+                //configure the director with the builder
+                UIOrderDirector director = new UIOrderDirector(builder);
+                //director invokes different builder
+                // methods
+                director.build();
+                //get the final build object
+                System.out.println("cambio");
+                
+                JPanel UIObj = builder.getSearchUI();
+                
+                
+                String[] posOrder = e.getActionCommand().split("-");
+              
+                OrderComponent aux = objOrderManager.getHistory(objOrderManager.getOrderHistory());
+                
+                Order c = (Order) aux.orderObjList.get(Integer.parseInt(posOrder[0])-1);
+                
+                
+                if (objOrderManager.getOrderHistory().equals(objOrderManager.CA_ORDER)){
+                    CaliforniaOrder co = (CaliforniaOrder) c;
+                    builder.inicialice(co.getOrderAmount() , co.getAdditionalTax(), 0);
+                } else  if (objOrderManager.getOrderHistory().equals(objOrderManager.NON_CA_ORDER)){
+                    NonCaliforniaOrder nco = (NonCaliforniaOrder) c;
+                    builder.inicialice(nco.getOrderAmount() , 0, 0);
+                } else  if (objOrderManager.getOrderHistory().equals(objOrderManager.OVERSEAS_ORDER)){
+                    OverseasOrder oo = (OverseasOrder) c;
+                    builder.inicialice(oo.getOrderAmount() , 0, oo.getAdditionalSH());
+                } else  if (objOrderManager.getOrderHistory().equals(objOrderManager.CO_ORDER)){
+                    ColombiaOrder col = (ColombiaOrder) c;
+                    builder.inicialice(col.getOrderAmount() , 0, col.getAdditionalSH());
+                }
+                
+                objOrderManager.displayNewUIHistory(UIObj);
+                
+            }
         }
     }
   }
