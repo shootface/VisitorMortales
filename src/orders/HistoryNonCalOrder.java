@@ -14,7 +14,7 @@ import java.util.Vector;
  * @author gumo0
  */
 public class HistoryNonCalOrder extends OrderComponent{
-
+    public static OrderComponent history;
     private HistoryNonCalOrder() {
         orderObjList = new Vector();
     }

@@ -16,7 +16,6 @@ import java.util.Vector;
 public abstract class OrderComponent{
     
     public Vector orderObjList;
-    public static OrderComponent history;
     
     public void addOrder(Order o) throws Exception{
         throw new Exception("Invalid Operation. Not Supported");

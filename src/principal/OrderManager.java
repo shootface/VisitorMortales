@@ -278,30 +278,32 @@ public class OrderManager extends JFrame {
       }
   }
   public void listOrderHistory(String orderType){
-      int i=0;
-      Iterator orderIter = null;
-      pOrderContainer.removeAll();
-      JLabel lblOrder = new JLabel("Orders");
-      pOrderContainer.add(lblOrder);
-      ButtonHandler objButtonHandler = new ButtonHandler(this);
-      
-      if(orderType.equals(OrderManager.CA_ORDER)){
-          orderIter = californiaOH.getAllTypeOrder();
-      } else if(orderType.equals(OrderManager.NON_CA_ORDER)){
-          orderIter = noncaliforniaOH.getAllTypeOrder();   
-      } else if(orderType.equals(OrderManager.OVERSEAS_ORDER)){
-          orderIter = noncaliforniaOH.getAllTypeOrder();   
-      } else if(orderType.equals(OrderManager.CO_ORDER)){
-          orderIter = noncaliforniaOH.getAllTypeOrder();   
-      }
-      while (orderIter.hasNext()){
-              i++;
-              Order c = (Order) orderIter.next();
-              System.out.println(c.getTotal()+"hola");
-              JButton order = new JButton(i+"-"+c.getTotal());
-                      
-              order.addActionListener(objButtonHandler);
-              pOrderContainer.add(order);
+      if(orderType.length()>0){
+        int i=0;
+        Iterator orderIter = null;
+        pOrderContainer.removeAll();
+        JLabel lblOrder = new JLabel("Orders");
+        pOrderContainer.add(lblOrder);
+        ButtonHandler objButtonHandler = new ButtonHandler(this);
+
+        if(orderType.equals(OrderManager.CA_ORDER)){
+            orderIter = californiaOH.getAllTypeOrder();
+        } else if(orderType.equals(OrderManager.NON_CA_ORDER)){
+            orderIter = noncaliforniaOH.getAllTypeOrder();   
+        } else if(orderType.equals(OrderManager.OVERSEAS_ORDER)){
+            orderIter = overseasOH.getAllTypeOrder();   
+        } else if(orderType.equals(OrderManager.CO_ORDER)){
+            orderIter = colombianOH.getAllTypeOrder();   
+        }
+        while (orderIter.hasNext()){
+                i++;
+                Order c = (Order) orderIter.next();
+                System.out.println(c.getTotal()+"hola");
+                JButton order = new JButton(i+"-"+c.getTotal());
+
+                order.addActionListener(objButtonHandler);
+                pOrderContainer.add(order);
+        }
       }
       validate();
   }
