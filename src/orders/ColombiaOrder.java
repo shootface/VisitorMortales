@@ -19,6 +19,16 @@ public class ColombiaOrder extends Order{
   public double getAdditionalSH() {
     return additionalSH;
   }
+
+    public void setOrderAmount(double orderAmount) {
+        this.orderAmount = orderAmount;
+    }
+
+    public void setAdditionalSH(double additionalSH) {
+        this.additionalSH = additionalSH;
+    }
+  
+  
   public void accept(OrderVisitor v) {
     v.visit(this);
   }

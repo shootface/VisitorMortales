@@ -19,6 +19,16 @@ public class CaliforniaOrder extends Order{
   public double getAdditionalTax() {
     return additionalTax;
   }
+
+    public void setOrderAmount(double orderAmount) {
+        this.orderAmount = orderAmount;
+    }
+
+    public void setAdditionalTax(double additionalTax) {
+        this.additionalTax = additionalTax;
+    }
+
+  
   
   @Override
   public void accept(OrderVisitor v) {

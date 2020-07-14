@@ -361,6 +361,7 @@ public class OrderManager extends JFrame {
 class ButtonHandler implements ActionListener {
   OrderManager objOrderManager;
   UIOrderBuilder builder;
+  String[] posOrder;
   
   public void actionPerformed(ActionEvent e) {
     String totalResult = null;
@@ -476,7 +477,8 @@ class ButtonHandler implements ActionListener {
         }
         */
     }if (e.getActionCommand().equals(OrderManager.EDIT_ORDER)) {
-      
+        OrderComponent aux = objOrderManager.getHistory(objOrderManager.getOrderHistory());
+        
     }else{
             //Toma el numero (1,2,3,...) que acompaña al valor total y con eso usando el metodo getElement()
             //lo obtine de la coleccion y usa el inicial para meter los valores en el builder que se crea
@@ -498,7 +500,7 @@ class ButtonHandler implements ActionListener {
                 JPanel UIObj = builder.getSearchUI();
                 
                 
-                String[] posOrder = e.getActionCommand().split("-");
+                posOrder = e.getActionCommand().split("-");
               
                 OrderComponent aux = objOrderManager.getHistory(objOrderManager.getOrderHistory());
                 
@@ -548,6 +550,10 @@ class ButtonHandler implements ActionListener {
     objOrderManager = inObjOrderManager;
   }
 
+    public String[] getPosOrder() {
+        return posOrder;
+    }
+  
 } // End of class ButtonHandler
 
 class BuilderFactory {
