@@ -15,6 +15,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import com.sun.java.swing.plaf.windows.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import orders.*;
 
 public class OrderManager extends JFrame {
@@ -277,14 +279,13 @@ public class OrderManager extends JFrame {
           return false;
       }
   }
-  public void listOrderHistory(String orderType){
+  public void listOrderHistory(String orderType, ButtonHandler objButtonHandler){
       if(orderType.length()>0){
         int i=0;
         Iterator orderIter = null;
         pOrderContainer.removeAll();
         JLabel lblOrder = new JLabel("Orders");
         pOrderContainer.add(lblOrder);
-        ButtonHandler objButtonHandler = new ButtonHandler(this);
 
         if(orderType.equals(OrderManager.CA_ORDER)){
             orderIter = californiaOH.getAllTypeOrder();
@@ -378,7 +379,7 @@ class ButtonHandler implements ActionListener {
             order = objOrderManager.getOrderType();
         }else if(e.getSource() == objOrderManager.getCmbOrderTypeHistory()){
             order = objOrderManager.getOrderHistory();
-            objOrderManager.listOrderHistory(order);
+            objOrderManager.listOrderHistory(order,this);
         }
       if (order.equals("") == false) {
         BuilderFactory factory = new BuilderFactory();
@@ -461,9 +462,7 @@ class ButtonHandler implements ActionListener {
           objOrderManager.setTotalValue(
           "Error");
       }
-    }
-
-    if (e.getActionCommand().equals(OrderManager.GET_TOTAL)) {
+    }else if (e.getActionCommand().equals(OrderManager.GET_TOTAL)) {
       //Get the Visitor
       OrderVisitor visitor =
         objOrderManager.getOrderVisitor();
@@ -478,9 +477,15 @@ class ButtonHandler implements ActionListener {
             System.out.println(c.getTotal());
         }
         */
-    }if (e.getActionCommand().equals(OrderManager.EDIT_ORDER)) {
-        OrderComponent aux = objOrderManager.getHistory(objOrderManager.getOrderHistory());
-        
+    }else if (e.getActionCommand().equals(OrderManager.EDIT_ORDER)) {
+        OrderComponent orderHistory = objOrderManager.getHistory(objOrderManager.getOrderHistory());
+        try {
+            System.out.println("POSSSS : "+ posOrder[0]);
+            Order c = (Order) orderHistory.orderObjList.get(Integer.parseInt(posOrder[0])-1);
+            orderHistory.editOrder(c,Integer.parseInt(posOrder[0])-1);
+        } catch (Exception ex) {
+            Logger.getLogger(ButtonHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }else{
             //Toma el numero (1,2,3,...) que acompaña al valor total y con eso usando el metodo getElement()
             //lo obtine de la coleccion y usa el inicial para meter los valores en el builder que se crea

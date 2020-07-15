@@ -30,13 +30,20 @@ public class HistoryCalOrder extends OrderComponent {
     public void addOrder(Order o) throws Exception{
         orderObjList.add(o);
     }
-    public Order getOrder(int i)throws Exception{
-        return (Order) (OrderComponent) orderObjList.elementAt(i);
+    public CaliforniaOrder getOrder(int i)throws Exception{
+        return (CaliforniaOrder) (OrderComponent) orderObjList.elementAt(i);
     }
 
     @Override
     public Double getTotal() {
         return 0.0;
     }
+    
+     public void editOrder(Order oe,int i)throws Exception{
+         CaliforniaOrder coe = (CaliforniaOrder) oe;
+         getOrder(i).setOrderAmount(coe.getOrderAmount());
+         getOrder(i).setAdditionalTax(coe.getAdditionalTax());
+         System.out.println("EDITADA");
+     }
 
 }

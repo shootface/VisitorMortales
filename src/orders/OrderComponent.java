@@ -24,6 +24,11 @@ public abstract class OrderComponent{
         throw new Exception("Invalid Operation. Not Supported");
     }
     
+    public void editOrder(Order oe,int i)throws Exception{
+        System.out.println(oe.getClass().getName());
+        throw new Exception("Invalid Operation. Not Supported");
+    }
+    
     public abstract Double getTotal();
     
     public Enumeration getAllOrders(){
