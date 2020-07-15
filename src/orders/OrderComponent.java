@@ -24,8 +24,7 @@ public abstract class OrderComponent{
         throw new Exception("Invalid Operation. Not Supported");
     }
     
-    public void editOrder(Order oe,int i)throws Exception{
-        System.out.println(oe.getClass().getName());
+    public void removeOrder(Order oe,int i)throws Exception{
         throw new Exception("Invalid Operation. Not Supported");
     }
     

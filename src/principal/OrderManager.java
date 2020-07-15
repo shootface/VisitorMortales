@@ -482,7 +482,7 @@ class ButtonHandler implements ActionListener {
         try {
             System.out.println("POSSSS : "+ posOrder[0]);
             Order c = (Order) orderHistory.orderObjList.get(Integer.parseInt(posOrder[0])-1);
-            orderHistory.editOrder(c,Integer.parseInt(posOrder[0])-1);
+            //orderHistory.editOrder(c,Integer.parseInt(posOrder[0])-1);
         } catch (Exception ex) {
             Logger.getLogger(ButtonHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
