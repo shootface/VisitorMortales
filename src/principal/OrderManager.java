@@ -369,7 +369,7 @@ public class OrderManager extends JFrame {
 
 class ButtonHandler implements ActionListener {
   OrderManager objOrderManager;
-  UIOrderBuilder builder;
+  UIOrderBuilder builderCreate, builderEdit;
   String[] posOrder;
   
   public void actionPerformed(ActionEvent e) {
@@ -381,36 +381,52 @@ class ButtonHandler implements ActionListener {
     
     if (e.getSource() instanceof JComboBox) {
         String order = "";
-        if(e.getSource() == objOrderManager.getCmbOrderType()){
-            order = objOrderManager.getOrderType();
+            if(e.getSource() == objOrderManager.getCmbOrderType()){
+                order = objOrderManager.getOrderType();
+                if (order.equals("") == false) {
+            BuilderFactory factory = new BuilderFactory();
+            //create an appropriate builder instance
+            builderCreate = factory.getUIBuilder(order);
+            //configure the director with the builder
+            UIOrderDirector director = new UIOrderDirector(builderCreate);
+            //director invokes different builder
+            // methods
+            director.build();
+            //get the final build object
+              System.out.println("cambio");
+            JPanel UIObj = builderCreate.getSearchUI();
+            if(e.getSource() == objOrderManager.getCmbOrderType()){
+                objOrderManager.displayNewUI(UIObj);
+                }
+              }
         }else if(e.getSource() == objOrderManager.getCmbOrderTypeHistory()){
             order = objOrderManager.getOrderHistory();
             objOrderManager.getpOrderCriteriaHistory().removeAll();
             objOrderManager.getpOrderCriteriaHistory().validate();
             objOrderManager.listOrderHistory(order,this);
+            if (order.equals("") == false) {
+                BuilderFactory factory = new BuilderFactory();
+                //create an appropriate builder instance
+                builderEdit = factory.getUIBuilder(order);
+                //configure the director with the builder
+                UIOrderDirector director = new UIOrderDirector(builderEdit);
+                //director invokes different builder
+                // methods
+                director.build();
+                //get the final build object
+                  System.out.println("cambio");
+                JPanel UIObj = builderEdit.getSearchUI();
+                if(e.getSource() == objOrderManager.getCmbOrderType()){
+                    objOrderManager.displayNewUI(UIObj);
+                }
+             }
         }
-      if (order.equals("") == false) {
-        BuilderFactory factory = new BuilderFactory();
-        //create an appropriate builder instance
-        builder = factory.getUIBuilder(order);
-        //configure the director with the builder
-        UIOrderDirector director = new UIOrderDirector(builder);
-        //director invokes different builder
-        // methods
-        director.build();
-        //get the final build object
-          System.out.println("cambio");
-        JPanel UIObj = builder.getSearchUI();
-        if(e.getSource() == objOrderManager.getCmbOrderType()){
-            objOrderManager.displayNewUI(UIObj);
-        }
-      }
     }
     
     if (e.getActionCommand().equals(OrderManager.CREATE_ORDER)) {
       //get input values
       String orderType = objOrderManager.getOrderType();
-      String[] orderData = builder.getOrder();
+      String[] orderData = builderCreate.getOrder();
 
       double dblOrderAmount = 0.0;
       double dblTax = 0.0;
@@ -422,19 +438,19 @@ class ButtonHandler implements ActionListener {
       
       int orderT = 0;
       
-      if(builder instanceof CalOrderBuilder){
+      if(builderCreate instanceof CalOrderBuilder){
           strOrderAmount = orderData[0];
           strTax = orderData[1];
           orderT = 1;
-      }else if(builder instanceof ColombianOrderBuilder){
+      }else if(builderCreate instanceof ColombianOrderBuilder){
           strOrderAmount = orderData[0];
           strSH = orderData[1];
           orderT = 2;
-      }else if(builder instanceof OverseasOrderBuilder){
+      }else if(builderCreate instanceof OverseasOrderBuilder){
           strOrderAmount = orderData[0];
           strSH = orderData[1];
           orderT = 3;
-      }else if(builder instanceof NonCalOrderBuilder){
+      }else if(builderCreate instanceof NonCalOrderBuilder){
           strOrderAmount = orderData[0];
           orderT = 4;
       }
@@ -487,7 +503,7 @@ class ButtonHandler implements ActionListener {
         */
     }else if (e.getActionCommand().equals(OrderManager.EDIT_ORDER)) {
         OrderComponent orderHistory = objOrderManager.getHistory(objOrderManager.getOrderHistory());
-        String[] orderData = builder.getOrder();
+        String[] orderData = builderEdit.getOrder();
         String orderType = objOrderManager.getOrderHistory();
 
         double dblOrderAmount = 0.0;
@@ -500,23 +516,23 @@ class ButtonHandler implements ActionListener {
 
         int orderT = 0;
 
-        if(builder instanceof CalOrderBuilder){
+        if(builderEdit instanceof CalOrderBuilder){
             strOrderAmount = orderData[0];
             strTax = orderData[1];
             orderT = 1;
-        }else if(builder instanceof ColombianOrderBuilder){
+        }else if(builderEdit instanceof ColombianOrderBuilder){
             strOrderAmount = orderData[0];
             strSH = orderData[1];
             orderT = 2;
-        }else if(builder instanceof OverseasOrderBuilder){
+        }else if(builderEdit instanceof OverseasOrderBuilder){
             strOrderAmount = orderData[0];
             strSH = orderData[1];
             orderT = 3;
-        }else if(builder instanceof NonCalOrderBuilder){
+        }else if(builderEdit instanceof NonCalOrderBuilder){
             strOrderAmount = orderData[0];
             orderT = 4;
         }
-
+        
         dblOrderAmount =
           new Double(strOrderAmount).doubleValue();
         dblTax = new Double(strTax).doubleValue();
@@ -547,16 +563,16 @@ class ButtonHandler implements ActionListener {
                 if (order.equals("") == false) {
                 BuilderFactory factory = new BuilderFactory();
                 //create an appropriate builder instance
-                builder = factory.getUIBuilder(order);
+                builderEdit = factory.getUIBuilder(order);
                 //configure the director with the builder
-                UIOrderDirector director = new UIOrderDirector(builder);
+                UIOrderDirector director = new UIOrderDirector(builderEdit);
                 //director invokes different builder
                 // methods
                 director.build();
                 //get the final build object
                 System.out.println("cambio");
                 
-                JPanel UIObj = builder.getSearchUI();
+                JPanel UIObj = builderEdit.getSearchUI();
                 
                 
                 posOrder = e.getActionCommand().split("-");
@@ -568,16 +584,16 @@ class ButtonHandler implements ActionListener {
                 
                 if (objOrderManager.getOrderHistory().equals(objOrderManager.CA_ORDER)){
                     CaliforniaOrder co = (CaliforniaOrder) c;
-                    builder.inicialice(co.getOrderAmount() , co.getAdditionalTax(), 0);
+                    builderEdit.inicialice(co.getOrderAmount() , co.getAdditionalTax(), 0);
                 } else  if (objOrderManager.getOrderHistory().equals(objOrderManager.NON_CA_ORDER)){
                     NonCaliforniaOrder nco = (NonCaliforniaOrder) c;
-                    builder.inicialice(nco.getOrderAmount() , 0, 0);
+                    builderEdit.inicialice(nco.getOrderAmount() , 0, 0);
                 } else  if (objOrderManager.getOrderHistory().equals(objOrderManager.OVERSEAS_ORDER)){
                     OverseasOrder oo = (OverseasOrder) c;
-                    builder.inicialice(oo.getOrderAmount() , 0, oo.getAdditionalSH());
+                    builderEdit.inicialice(oo.getOrderAmount() , 0, oo.getAdditionalSH());
                 } else  if (objOrderManager.getOrderHistory().equals(objOrderManager.CO_ORDER)){
                     ColombiaOrder col = (ColombiaOrder) c;
-                    builder.inicialice(col.getOrderAmount() , 0, col.getAdditionalSH());
+                    builderEdit.inicialice(col.getOrderAmount() , 0, col.getAdditionalSH());
                 }
                 
                 objOrderManager.displayNewUIHistory(UIObj);
