@@ -308,6 +308,12 @@ public class OrderManager extends JFrame {
       }
       validate();
   }
+
+    public JPanel getpOrderCriteriaHistory() {
+        return pOrderCriteriaHistory;
+    }
+  
+  
   public static void main(String[] args) {
     JFrame frame = new OrderManager();
 
@@ -379,6 +385,8 @@ class ButtonHandler implements ActionListener {
             order = objOrderManager.getOrderType();
         }else if(e.getSource() == objOrderManager.getCmbOrderTypeHistory()){
             order = objOrderManager.getOrderHistory();
+            objOrderManager.getpOrderCriteriaHistory().removeAll();
+            objOrderManager.getpOrderCriteriaHistory().validate();
             objOrderManager.listOrderHistory(order,this);
         }
       if (order.equals("") == false) {
