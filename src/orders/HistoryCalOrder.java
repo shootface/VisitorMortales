@@ -17,8 +17,8 @@ import principal.OrderVisitor;
  * @author gumo0
  */
 public class HistoryCalOrder extends OrderComponent {
-    public static OrderComponent history;
-    private HistoryCalOrder() {
+
+    public HistoryCalOrder() {
         orderObjList = new Vector();
     }
     

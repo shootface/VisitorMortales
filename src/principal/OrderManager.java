@@ -43,10 +43,10 @@ public class OrderManager extends JFrame {
   private OrderVisitor objVisitor;
   
   //Order history
-  private OrderComponent californiaOH;
-  private OrderComponent colombianOH;
-  private OrderComponent noncaliforniaOH;
-  private OrderComponent overseasOH;
+  private HistoryCalOrder californiaOH;
+  private HistoryColOrder colombianOH;
+  private HistoryNonCalOrder noncaliforniaOH;
+  private HistoryOverOrder overseasOH;
 
   public OrderManager() {
     super("Visitor Pattern - Example");
@@ -54,10 +54,10 @@ public class OrderManager extends JFrame {
     //Create the visitor instance
     objVisitor = new OrderVisitor();
     //History order
-    californiaOH = HistoryCalOrder.getOrderHistory();
-    colombianOH = HistoryColOrder.getOrderHistory();
-    noncaliforniaOH = HistoryNonCalOrder.getOrderHistory();
-    overseasOH = HistoryOverOrder.getOrderHistory();
+    californiaOH = (HistoryCalOrder) HistoryCalOrder.getOrderHistory();
+    colombianOH = (HistoryColOrder) HistoryColOrder.getOrderHistory();
+    noncaliforniaOH = (HistoryNonCalOrder) HistoryNonCalOrder.getOrderHistory();
+    overseasOH = (HistoryOverOrder) HistoryOverOrder.getOrderHistory();
     
     JTabbedPane tabbedPane = new JTabbedPane();
     cmbOrderType = new JComboBox();
