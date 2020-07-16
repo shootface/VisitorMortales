@@ -479,13 +479,57 @@ class ButtonHandler implements ActionListener {
         */
     }else if (e.getActionCommand().equals(OrderManager.EDIT_ORDER)) {
         OrderComponent orderHistory = objOrderManager.getHistory(objOrderManager.getOrderHistory());
+        String[] orderData = builder.getOrder();
+        String orderType = objOrderManager.getOrderHistory();
+
+        double dblOrderAmount = 0.0;
+        double dblTax = 0.0;
+        double dblSH = 0.0;
+
+        String strOrderAmount = "0.0";
+        String strTax = "0.0";
+        String strSH = "0.0";
+
+        int orderT = 0;
+
+        if(builder instanceof CalOrderBuilder){
+            strOrderAmount = orderData[0];
+            strTax = orderData[1];
+            orderT = 1;
+        }else if(builder instanceof ColombianOrderBuilder){
+            strOrderAmount = orderData[0];
+            strSH = orderData[1];
+            orderT = 2;
+        }else if(builder instanceof OverseasOrderBuilder){
+            strOrderAmount = orderData[0];
+            strSH = orderData[1];
+            orderT = 3;
+        }else if(builder instanceof NonCalOrderBuilder){
+            strOrderAmount = orderData[0];
+            orderT = 4;
+        }
+
+        dblOrderAmount =
+          new Double(strOrderAmount).doubleValue();
+        dblTax = new Double(strTax).doubleValue();
+        dblSH = new Double(strSH).doubleValue();
+
+          System.out.println("-----------------------");
+          System.out.println(dblOrderAmount);
+          System.out.println(dblTax);
+          System.out.println(dblSH);
+          System.out.println("-----------------------");
+
+        //Create the order
+        Order order = createOrder(orderType, dblOrderAmount,
+                      dblTax, dblSH);
         try {
             System.out.println("POSSSS : "+ posOrder[0]);
-            Order c = (Order) orderHistory.orderObjList.get(Integer.parseInt(posOrder[0])-1);
-            //orderHistory.editOrder(c,Integer.parseInt(posOrder[0])-1);
+            orderHistory.editOrder(order,Integer.parseInt(posOrder[0])-1);
         } catch (Exception ex) {
             Logger.getLogger(ButtonHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
+        objOrderManager.listOrderHistory(orderType,this);
     }else{
             //Toma el numero (1,2,3,...) que acompaña al valor total y con eso usando el metodo getElement()
             //lo obtine de la coleccion y usa el inicial para meter los valores en el builder que se crea

@@ -40,10 +40,7 @@ public class HistoryCalOrder extends OrderComponent {
     }
     
      public void editOrder(Order oe,int i)throws Exception{
-         CaliforniaOrder coe = (CaliforniaOrder) oe;
-         getOrder(i).setOrderAmount(coe.getOrderAmount());
-         getOrder(i).setAdditionalTax(coe.getAdditionalTax());
-         System.out.println("EDITADA");
+         orderObjList.setElementAt(oe, i);
      }
 
 }

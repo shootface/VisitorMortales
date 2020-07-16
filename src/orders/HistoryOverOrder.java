@@ -37,5 +37,7 @@ public class HistoryOverOrder extends OrderComponent{
     public Double getTotal() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+    public void editOrder(Order oe,int i)throws Exception{
+         orderObjList.setElementAt(oe, i);
+     }
 }
