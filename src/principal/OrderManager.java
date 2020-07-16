@@ -37,6 +37,7 @@ public class OrderManager extends JFrame {
   private JPanel pOrderCriteria,pOrderCriteriaHistory,pOrderContainer;
   private JLabel lblOrderType;
   private JLabel lblTotal, lblTotalValue;
+  private JLabel lblTotalOrders;
   private JScrollPane scOrderHistory;
 
   private OrderVisitor objVisitor;
@@ -174,7 +175,7 @@ public class OrderManager extends JFrame {
     GridBagLayout gridbagEditOrder = new GridBagLayout();
     editOrder.setLayout(gridbagEditOrder);
     GridBagConstraints gbcEO = new GridBagConstraints();
-
+    lblTotalOrders = new JLabel("Total: 0.0");
     cmbOrderTypeHistory = new JComboBox();
     cmbOrderTypeHistory.addItem("");
     cmbOrderTypeHistory.addItem(OrderManager.CA_ORDER);
@@ -195,12 +196,13 @@ public class OrderManager extends JFrame {
     JButton editOrderButton = new JButton(OrderManager.EDIT_ORDER);
     editOrderButton.setMnemonic(KeyEvent.VK_E);
     editOrderButton.addActionListener(objButtonHandler);
-
+    
     editOrder.add(cmbOrderTypeHistory);
     editOrder.add(scOrderHistory);
     editOrder.add(pOrderCriteriaHistory);
     editOrder.add(editOrderButton);
     editOrder.add(exitButton);
+    editOrder.add(lblTotalOrders);
     
     gbcEO.insets.top = 5;
     gbcEO.insets.bottom = 0;
@@ -216,6 +218,9 @@ public class OrderManager extends JFrame {
     gbcEO.gridx = 1;
     gbcEO.gridy = 0;
     gridbagEditOrder.setConstraints(scOrderHistory, gbcEO);
+    gbcEO.gridx = 1;
+    gbcEO.gridy = 1;
+    gridbagEditOrder.setConstraints(lblTotalOrders, gbcEO);
     
     gbcEO.gridx = 0;
     gbcEO.gridy = 2;
@@ -289,12 +294,16 @@ public class OrderManager extends JFrame {
 
         if(orderType.equals(OrderManager.CA_ORDER)){
             orderIter = californiaOH.getAllTypeOrder();
+            lblTotalOrders.setText("Total: "+ californiaOH.getTotal());
         } else if(orderType.equals(OrderManager.NON_CA_ORDER)){
-            orderIter = noncaliforniaOH.getAllTypeOrder();   
+            orderIter = noncaliforniaOH.getAllTypeOrder();  
+            lblTotalOrders.setText("Total: "+ noncaliforniaOH.getTotal());
         } else if(orderType.equals(OrderManager.OVERSEAS_ORDER)){
-            orderIter = overseasOH.getAllTypeOrder();   
+            orderIter = overseasOH.getAllTypeOrder();  
+            lblTotalOrders.setText("Total: "+ overseasOH.getTotal());
         } else if(orderType.equals(OrderManager.CO_ORDER)){
-            orderIter = colombianOH.getAllTypeOrder();   
+            orderIter = colombianOH.getAllTypeOrder(); 
+            lblTotalOrders.setText("Total: "+ colombianOH.getTotal());
         }
         while (orderIter.hasNext()){
                 i++;
@@ -420,6 +429,7 @@ class ButtonHandler implements ActionListener {
                     objOrderManager.displayNewUI(UIObj);
                 }
              }
+            System.out.println(objOrderManager.getHistory(order).getTotal());
         }
     }
     
@@ -494,6 +504,8 @@ class ButtonHandler implements ActionListener {
                       visitor.getOrderTotal()).toString();
       totalResult = " Orders Total = " + totalResult;
       objOrderManager.setTotalValue(totalResult);
+      
+      
       /*
       Iterator orderIter = objOrderManager.getCaliforniaOH().getAllTypeOrder();
         while (orderIter.hasNext()){
