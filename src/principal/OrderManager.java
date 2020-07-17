@@ -380,9 +380,11 @@ class ButtonHandler implements ActionListener {
   OrderManager objOrderManager;
   UIOrderBuilder builderCreate, builderEdit;
   String[] posOrder;
+  int orderT = 0;
   
   public void actionPerformed(ActionEvent e) {
     String totalResult = null;
+    
     
     if (e.getActionCommand().equals(OrderManager.EXIT)) {
       System.exit(1);
@@ -412,47 +414,15 @@ class ButtonHandler implements ActionListener {
       String orderType = objOrderManager.getOrderType();
       String[] orderData = builderCreate.getOrder();
 
+      
       double dblOrderAmount = 0.0;
       double dblTax = 0.0;
       double dblSH = 0.0;
       
-      String strOrderAmount = "0.0";
-      String strTax = "0.0";
-      String strSH = "0.0";
-      
-      int orderT = 0;
-      
-      if(builderCreate instanceof CalOrderBuilder){
-          strOrderAmount = orderData[0];
-          strTax = orderData[1];
-          orderT = 1;
-      }else if(builderCreate instanceof ColombianOrderBuilder){
-          strOrderAmount = orderData[0];
-          strSH = orderData[1];
-          orderT = 2;
-      }else if(builderCreate instanceof OverseasOrderBuilder){
-          strOrderAmount = orderData[0];
-          strSH = orderData[1];
-          orderT = 3;
-      }else if(builderCreate instanceof NonCalOrderBuilder){
-          strOrderAmount = orderData[0];
-          orderT = 4;
-      }
-
-      dblOrderAmount =
-        new Double(strOrderAmount).doubleValue();
-      dblTax = new Double(strTax).doubleValue();
-      dblSH = new Double(strSH).doubleValue();
-      
-        System.out.println("-----------------------");
-        System.out.println(dblOrderAmount);
-        System.out.println(dblTax);
-        System.out.println(dblSH);
-        System.out.println("-----------------------");
-
+      double[] dateCreate = getOrder(builderCreate);
       //Create the order
-      Order order = createOrder(orderType, dblOrderAmount,
-                    dblTax, dblSH);
+      Order order = createOrder(orderType, dateCreate[0],
+                    dateCreate[1], dateCreate[2]);
       
       boolean ifsave = objOrderManager.saveOrder(order, orderT);
       
@@ -496,43 +466,11 @@ class ButtonHandler implements ActionListener {
         double dblTax = 0.0;
         double dblSH = 0.0;
 
-        String strOrderAmount = "0.0";
-        String strTax = "0.0";
-        String strSH = "0.0";
-
-        int orderT = 0;
-
-        if(builderEdit instanceof CalOrderBuilder){
-            strOrderAmount = orderData[0];
-            strTax = orderData[1];
-            orderT = 1;
-        }else if(builderEdit instanceof ColombianOrderBuilder){
-            strOrderAmount = orderData[0];
-            strSH = orderData[1];
-            orderT = 2;
-        }else if(builderEdit instanceof OverseasOrderBuilder){
-            strOrderAmount = orderData[0];
-            strSH = orderData[1];
-            orderT = 3;
-        }else if(builderEdit instanceof NonCalOrderBuilder){
-            strOrderAmount = orderData[0];
-            orderT = 4;
-        }
-        
-        dblOrderAmount =
-          new Double(strOrderAmount).doubleValue();
-        dblTax = new Double(strTax).doubleValue();
-        dblSH = new Double(strSH).doubleValue();
-
-          System.out.println("-----------------------");
-          System.out.println(dblOrderAmount);
-          System.out.println(dblTax);
-          System.out.println(dblSH);
-          System.out.println("-----------------------");
+        double[] date = getOrder(builderEdit);
 
         //Create the order
-        Order order = createOrder(orderType, dblOrderAmount,
-                      dblTax, dblSH);
+        Order order = createOrder(orderType, date[0],
+                      date[1], date[2]);
         try {
             orderHistory.editOrder(order,Integer.parseInt(posOrder[0])-1);
         } catch (Exception ex) {
@@ -625,13 +563,52 @@ class ButtonHandler implements ActionListener {
         objOrderManager.displayNewUI(UIObj);
     }
   }
-public void saveOrder(){
+public double[] getOrder(UIOrderBuilder ob){
+      double dblOrderAmount = 0.0;
+      double dblTax = 0.0;
+      double dblSH = 0.0;
+      
+      String strOrderAmount = "0.0";
+      String strTax = "0.0";
+      String strSH = "0.0";
+      String[] orderData = ob.getOrder();
+      
+      if(ob instanceof CalOrderBuilder){
+          strOrderAmount = orderData[0];
+          strTax = orderData[1];
+          orderT = 1;
+      }else if(ob instanceof ColombianOrderBuilder){
+          strOrderAmount = orderData[0];
+          strSH = orderData[1];
+          orderT = 2;
+      }else if(ob instanceof OverseasOrderBuilder){
+          strOrderAmount = orderData[0];
+          strSH = orderData[1];
+          orderT = 3;
+      }else if(ob instanceof NonCalOrderBuilder){
+          strOrderAmount = orderData[0];
+          orderT = 4;
+      }
+
+      dblOrderAmount =
+        new Double(strOrderAmount).doubleValue();
+      dblTax = new Double(strTax).doubleValue();
+      dblSH = new Double(strSH).doubleValue();
+      
+        System.out.println("-----------------------");
+        System.out.println(dblOrderAmount);
+        System.out.println(dblTax);
+        System.out.println(dblSH);
+        System.out.println("-----------------------");
+        
+        double[] dates = new double[3];
+        dates[0] = dblOrderAmount;
+        dates[1] = dblTax;
+        dates[2] = dblSH;
+        return dates;
     
 }
 
-public void editOrder(){
-    
-}
     public String[] getPosOrder() {
         return posOrder;
     }

@@ -16,6 +16,7 @@ import java.util.logging.Logger;
  * @author gumo0
  */
 public class HistoryOverOrder extends OrderComponent{
+    public static OrderComponent history;
     private HistoryOverOrder() {
         orderObjList = new Vector();
     }
