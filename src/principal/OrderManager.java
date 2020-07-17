@@ -393,41 +393,15 @@ class ButtonHandler implements ActionListener {
             if(e.getSource() == objOrderManager.getCmbOrderType()){
                 order = objOrderManager.getOrderType();
                 if (order.equals("") == false) {
-            BuilderFactory factory = new BuilderFactory();
-            //create an appropriate builder instance
-            builderCreate = factory.getUIBuilder(order);
-            //configure the director with the builder
-            UIOrderDirector director = new UIOrderDirector(builderCreate);
-            //director invokes different builder
-            // methods
-            director.build();
-            //get the final build object
-              System.out.println("cambio");
-            JPanel UIObj = builderCreate.getSearchUI();
-            if(e.getSource() == objOrderManager.getCmbOrderType()){
-                objOrderManager.displayNewUI(UIObj);
-                }
-              }
+                    assignBuilder(order, e);
+            }
         }else if(e.getSource() == objOrderManager.getCmbOrderTypeHistory()){
             order = objOrderManager.getOrderHistory();
             objOrderManager.getpOrderCriteriaHistory().removeAll();
             objOrderManager.getpOrderCriteriaHistory().validate();
             objOrderManager.listOrderHistory(order,this);
             if (order.equals("") == false) {
-                BuilderFactory factory = new BuilderFactory();
-                //create an appropriate builder instance
-                builderEdit = factory.getUIBuilder(order);
-                //configure the director with the builder
-                UIOrderDirector director = new UIOrderDirector(builderEdit);
-                //director invokes different builder
-                // methods
-                director.build();
-                //get the final build object
-                  System.out.println("cambio");
-                JPanel UIObj = builderEdit.getSearchUI();
-                if(e.getSource() == objOrderManager.getCmbOrderType()){
-                    objOrderManager.displayNewUI(UIObj);
-                }
+                assignBuilder(order, e);
              }
             System.out.println(objOrderManager.getHistory(order).getTotal());
         }
@@ -560,7 +534,6 @@ class ButtonHandler implements ActionListener {
         Order order = createOrder(orderType, dblOrderAmount,
                       dblTax, dblSH);
         try {
-            System.out.println("POSSSS : "+ posOrder[0]);
             orderHistory.editOrder(order,Integer.parseInt(posOrder[0])-1);
         } catch (Exception ex) {
             Logger.getLogger(ButtonHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -630,13 +603,35 @@ class ButtonHandler implements ActionListener {
     }
     return null;
   }
-
+  
   public ButtonHandler() {
   }
   public ButtonHandler(OrderManager inObjOrderManager) {
     objOrderManager = inObjOrderManager;
   }
+  
+  public void assignBuilder(String order,ActionEvent e){
+    BuilderFactory factory = new BuilderFactory();
+    //create an appropriate builder instance
+    builderCreate = factory.getUIBuilder(order);
+    //configure the director with the builder
+    UIOrderDirector director = new UIOrderDirector(builderCreate);
+    //director invokes different builder
+    // methods
+    director.build();
+    //get the final build object
+    JPanel UIObj = builderCreate.getSearchUI();
+    if(e.getSource() == objOrderManager.getCmbOrderType()){
+        objOrderManager.displayNewUI(UIObj);
+    }
+  }
+public void saveOrder(){
+    
+}
 
+public void editOrder(){
+    
+}
     public String[] getPosOrder() {
         return posOrder;
     }
