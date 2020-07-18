@@ -197,11 +197,15 @@ public class OrderManager extends JFrame {
     editOrderButton.setMnemonic(KeyEvent.VK_E);
     editOrderButton.addActionListener(objButtonHandler);
     
+    JButton exitButtonEdit = new JButton(OrderManager.EXIT);
+    exitButtonEdit.setMnemonic(KeyEvent.VK_X);
+    exitButtonEdit.addActionListener(new ButtonHandler());
+    
     editOrder.add(cmbOrderTypeHistory);
     editOrder.add(scOrderHistory);
     editOrder.add(pOrderCriteriaHistory);
     editOrder.add(editOrderButton);
-    editOrder.add(exitButton);
+    editOrder.add(exitButtonEdit);
     editOrder.add(lblTotalOrders);
     
     gbcEO.insets.top = 5;
@@ -228,7 +232,7 @@ public class OrderManager extends JFrame {
     
     gbcEO.gridx = 1;
     gbcEO.gridy = 2;
-    gridbagEditOrder.setConstraints(exitButton, gbcEO);
+    gridbagEditOrder.setConstraints(exitButtonEdit, gbcEO);
     
     //****************************************************
     // Add tabs 
