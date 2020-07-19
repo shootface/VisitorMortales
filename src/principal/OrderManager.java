@@ -35,7 +35,7 @@ public class OrderManager extends JFrame {
   
   private JComboBox cmbOrderType,cmbOrderTypeHistory;
   private JPanel pOrderCriteria,pOrderCriteriaHistory,pOrderContainer;
-  private JLabel lblOrderType;
+  private JLabel lblOrderTypeCreate, lblOrderTypeEdit;
   private JLabel lblTotal, lblTotalValue;
   private JLabel lblTotalOrders;
   private JScrollPane scOrderHistory;
@@ -69,7 +69,7 @@ public class OrderManager extends JFrame {
     
     pOrderCriteria = new JPanel();
 
-    lblOrderType = new JLabel("Order Type:");
+    lblOrderTypeCreate = new JLabel("Order Type:");
 
     lblTotal = new JLabel("Result:");
     lblTotalValue = new JLabel("Click Create or GetTotal Button");
@@ -117,7 +117,7 @@ public class OrderManager extends JFrame {
     buttonPanel.setLayout(gridbag);
     GridBagConstraints gbc = new GridBagConstraints();
 
-    buttonPanel.add(lblOrderType);
+    buttonPanel.add(lblOrderTypeCreate);
     buttonPanel.add(cmbOrderType);
     buttonPanel.add(pOrderCriteria);
     buttonPanel.add(lblTotal);
@@ -132,7 +132,7 @@ public class OrderManager extends JFrame {
     
     gbc.gridx = 0;
     gbc.gridy = 0;
-    gridbag.setConstraints(lblOrderType, gbc);
+    gridbag.setConstraints(lblOrderTypeCreate, gbc);
     gbc.gridx = 1;
     gbc.gridy = 0;
     gridbag.setConstraints(cmbOrderType, gbc);
@@ -175,6 +175,7 @@ public class OrderManager extends JFrame {
     GridBagLayout gridbagEditOrder = new GridBagLayout();
     editOrder.setLayout(gridbagEditOrder);
     GridBagConstraints gbcEO = new GridBagConstraints();
+    lblOrderTypeEdit = new JLabel("Order Type:");
     lblTotalOrders = new JLabel("Total: 0.0");
     cmbOrderTypeHistory = new JComboBox();
     cmbOrderTypeHistory.addItem("");
@@ -200,7 +201,7 @@ public class OrderManager extends JFrame {
     JButton exitButtonEdit = new JButton(OrderManager.EXIT);
     exitButtonEdit.setMnemonic(KeyEvent.VK_X);
     exitButtonEdit.addActionListener(new ButtonHandler());
-    
+    editOrder.add(lblOrderTypeEdit);
     editOrder.add(cmbOrderTypeHistory);
     editOrder.add(scOrderHistory);
     editOrder.add(pOrderCriteriaHistory);
@@ -215,19 +216,22 @@ public class OrderManager extends JFrame {
     
     gbcEO.gridx = 0;
     gbcEO.gridy = 0;
-    gridbagEditOrder.setConstraints(cmbOrderTypeHistory, gbcEO);
+    gridbagEditOrder.setConstraints(lblOrderTypeEdit, gbcEO);
     gbcEO.gridx = 0;
     gbcEO.gridy = 1;
+    gridbagEditOrder.setConstraints(cmbOrderTypeHistory, gbcEO);
+    gbcEO.gridx = 0;
+    gbcEO.gridy = 2;
     gridbagEditOrder.setConstraints(pOrderCriteriaHistory, gbcEO);
     gbcEO.gridx = 1;
-    gbcEO.gridy = 0;
+    gbcEO.gridy = 1;
     gridbagEditOrder.setConstraints(scOrderHistory, gbcEO);
     gbcEO.gridx = 1;
-    gbcEO.gridy = 1;
+    gbcEO.gridy = 2;
     gridbagEditOrder.setConstraints(lblTotalOrders, gbcEO);
     
     gbcEO.gridx = 0;
-    gbcEO.gridy = 2;
+    gbcEO.gridy = 3;
     gridbagEditOrder.setConstraints(editOrderButton, gbcEO);
     
     gbcEO.gridx = 1;
