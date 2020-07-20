@@ -78,7 +78,7 @@ public class OrderManager extends JFrame {
     JButton getTotalButton = new JButton(OrderManager.GET_TOTAL);
     getTotalButton.setMnemonic(KeyEvent.VK_G);
     JButton createOrderButton = new JButton(OrderManager.CREATE_ORDER);
-    getTotalButton.setMnemonic(KeyEvent.VK_C);
+    createOrderButton.setMnemonic(KeyEvent.VK_C);
     JButton exitButton = new JButton(OrderManager.EXIT);
     exitButton.setMnemonic(KeyEvent.VK_X);
     ButtonHandler objButtonHandler = new ButtonHandler(this);
@@ -90,7 +90,7 @@ public class OrderManager extends JFrame {
     exitButton.addActionListener(new ButtonHandler());
 
     //For layout purposes, put the buttons in a separate panel
-    JPanel buttonPanel = new JPanel();
+    
 
     JPanel panel = new JPanel();
     GridBagLayout gridbag2 = new GridBagLayout();
@@ -113,6 +113,7 @@ public class OrderManager extends JFrame {
     gridbag2.setConstraints(exitButton, gbc2);
 
     //****************************************************
+    JPanel buttonPanel = new JPanel();
     GridBagLayout gridbag = new GridBagLayout();
     buttonPanel.setLayout(gridbag);
     GridBagConstraints gbc = new GridBagConstraints();
