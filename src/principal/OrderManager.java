@@ -35,7 +35,7 @@ public class OrderManager extends JFrame {
   
   private JComboBox cmbOrderType,cmbOrderTypeHistory;
   private JPanel pOrderCriteria,pOrderCriteriaHistory,pOrderContainer;
-  private JLabel lblOrderType;
+  private JLabel lblOrderTypeCreate, lblOrderTypeEdit;
   private JLabel lblTotal, lblTotalValue;
   private JLabel lblTotalOrders;
   private JScrollPane scOrderHistory;
@@ -69,7 +69,7 @@ public class OrderManager extends JFrame {
     
     pOrderCriteria = new JPanel();
 
-    lblOrderType = new JLabel("Order Type:");
+    lblOrderTypeCreate = new JLabel("Order Type:");
 
     lblTotal = new JLabel("Result:");
     lblTotalValue = new JLabel("Click Create or GetTotal Button");
@@ -118,7 +118,7 @@ public class OrderManager extends JFrame {
     buttonPanel.setLayout(gridbag);
     GridBagConstraints gbc = new GridBagConstraints();
 
-    buttonPanel.add(lblOrderType);
+    buttonPanel.add(lblOrderTypeCreate);
     buttonPanel.add(cmbOrderType);
     buttonPanel.add(pOrderCriteria);
     buttonPanel.add(lblTotal);
@@ -133,7 +133,7 @@ public class OrderManager extends JFrame {
     
     gbc.gridx = 0;
     gbc.gridy = 0;
-    gridbag.setConstraints(lblOrderType, gbc);
+    gridbag.setConstraints(lblOrderTypeCreate, gbc);
     gbc.gridx = 1;
     gbc.gridy = 0;
     gridbag.setConstraints(cmbOrderType, gbc);
@@ -176,6 +176,7 @@ public class OrderManager extends JFrame {
     GridBagLayout gridbagEditOrder = new GridBagLayout();
     editOrder.setLayout(gridbagEditOrder);
     GridBagConstraints gbcEO = new GridBagConstraints();
+    lblOrderTypeEdit = new JLabel("Order Type:");
     lblTotalOrders = new JLabel("Total: 0.0");
     cmbOrderTypeHistory = new JComboBox();
     cmbOrderTypeHistory.addItem("");
@@ -198,11 +199,15 @@ public class OrderManager extends JFrame {
     editOrderButton.setMnemonic(KeyEvent.VK_E);
     editOrderButton.addActionListener(objButtonHandler);
     
+    JButton exitButtonEdit = new JButton(OrderManager.EXIT);
+    exitButtonEdit.setMnemonic(KeyEvent.VK_X);
+    exitButtonEdit.addActionListener(new ButtonHandler());
+    editOrder.add(lblOrderTypeEdit);
     editOrder.add(cmbOrderTypeHistory);
     editOrder.add(scOrderHistory);
     editOrder.add(pOrderCriteriaHistory);
     editOrder.add(editOrderButton);
-    editOrder.add(exitButton);
+    editOrder.add(exitButtonEdit);
     editOrder.add(lblTotalOrders);
     
     gbcEO.insets.top = 5;
@@ -212,24 +217,27 @@ public class OrderManager extends JFrame {
     
     gbcEO.gridx = 0;
     gbcEO.gridy = 0;
-    gridbagEditOrder.setConstraints(cmbOrderTypeHistory, gbcEO);
+    gridbagEditOrder.setConstraints(lblOrderTypeEdit, gbcEO);
     gbcEO.gridx = 0;
     gbcEO.gridy = 1;
+    gridbagEditOrder.setConstraints(cmbOrderTypeHistory, gbcEO);
+    gbcEO.gridx = 0;
+    gbcEO.gridy = 2;
     gridbagEditOrder.setConstraints(pOrderCriteriaHistory, gbcEO);
     gbcEO.gridx = 1;
-    gbcEO.gridy = 0;
+    gbcEO.gridy = 1;
     gridbagEditOrder.setConstraints(scOrderHistory, gbcEO);
     gbcEO.gridx = 1;
-    gbcEO.gridy = 1;
+    gbcEO.gridy = 2;
     gridbagEditOrder.setConstraints(lblTotalOrders, gbcEO);
     
     gbcEO.gridx = 0;
-    gbcEO.gridy = 2;
+    gbcEO.gridy = 3;
     gridbagEditOrder.setConstraints(editOrderButton, gbcEO);
     
     gbcEO.gridx = 1;
     gbcEO.gridy = 2;
-    gridbagEditOrder.setConstraints(exitButton, gbcEO);
+    gridbagEditOrder.setConstraints(exitButtonEdit, gbcEO);
     
     //****************************************************
     // Add tabs 
@@ -381,9 +389,11 @@ class ButtonHandler implements ActionListener {
   OrderManager objOrderManager;
   UIOrderBuilder builderCreate, builderEdit;
   String[] posOrder;
+  int orderT = 0;
   
   public void actionPerformed(ActionEvent e) {
     String totalResult = null;
+    
     
     if (e.getActionCommand().equals(OrderManager.EXIT)) {
       System.exit(1);
@@ -394,41 +404,15 @@ class ButtonHandler implements ActionListener {
             if(e.getSource() == objOrderManager.getCmbOrderType()){
                 order = objOrderManager.getOrderType();
                 if (order.equals("") == false) {
-            BuilderFactory factory = new BuilderFactory();
-            //create an appropriate builder instance
-            builderCreate = factory.getUIBuilder(order);
-            //configure the director with the builder
-            UIOrderDirector director = new UIOrderDirector(builderCreate);
-            //director invokes different builder
-            // methods
-            director.build();
-            //get the final build object
-              System.out.println("cambio");
-            JPanel UIObj = builderCreate.getSearchUI();
-            if(e.getSource() == objOrderManager.getCmbOrderType()){
-                objOrderManager.displayNewUI(UIObj);
-                }
-              }
+                    assignBuilder(order, e);
+            }
         }else if(e.getSource() == objOrderManager.getCmbOrderTypeHistory()){
             order = objOrderManager.getOrderHistory();
             objOrderManager.getpOrderCriteriaHistory().removeAll();
             objOrderManager.getpOrderCriteriaHistory().validate();
             objOrderManager.listOrderHistory(order,this);
             if (order.equals("") == false) {
-                BuilderFactory factory = new BuilderFactory();
-                //create an appropriate builder instance
-                builderEdit = factory.getUIBuilder(order);
-                //configure the director with the builder
-                UIOrderDirector director = new UIOrderDirector(builderEdit);
-                //director invokes different builder
-                // methods
-                director.build();
-                //get the final build object
-                  System.out.println("cambio");
-                JPanel UIObj = builderEdit.getSearchUI();
-                if(e.getSource() == objOrderManager.getCmbOrderType()){
-                    objOrderManager.displayNewUI(UIObj);
-                }
+                assignBuilder(order, e);
              }
             System.out.println(objOrderManager.getHistory(order).getTotal());
         }
@@ -439,47 +423,15 @@ class ButtonHandler implements ActionListener {
       String orderType = objOrderManager.getOrderType();
       String[] orderData = builderCreate.getOrder();
 
+      
       double dblOrderAmount = 0.0;
       double dblTax = 0.0;
       double dblSH = 0.0;
       
-      String strOrderAmount = "0.0";
-      String strTax = "0.0";
-      String strSH = "0.0";
-      
-      int orderT = 0;
-      
-      if(builderCreate instanceof CalOrderBuilder){
-          strOrderAmount = orderData[0];
-          strTax = orderData[1];
-          orderT = 1;
-      }else if(builderCreate instanceof ColombianOrderBuilder){
-          strOrderAmount = orderData[0];
-          strSH = orderData[1];
-          orderT = 2;
-      }else if(builderCreate instanceof OverseasOrderBuilder){
-          strOrderAmount = orderData[0];
-          strSH = orderData[1];
-          orderT = 3;
-      }else if(builderCreate instanceof NonCalOrderBuilder){
-          strOrderAmount = orderData[0];
-          orderT = 4;
-      }
-
-      dblOrderAmount =
-        new Double(strOrderAmount).doubleValue();
-      dblTax = new Double(strTax).doubleValue();
-      dblSH = new Double(strSH).doubleValue();
-      
-        System.out.println("-----------------------");
-        System.out.println(dblOrderAmount);
-        System.out.println(dblTax);
-        System.out.println(dblSH);
-        System.out.println("-----------------------");
-
+      double[] dateCreate = getOrder(builderCreate);
       //Create the order
-      Order order = createOrder(orderType, dblOrderAmount,
-                    dblTax, dblSH);
+      Order order = createOrder(orderType, dateCreate[0],
+                    dateCreate[1], dateCreate[2]);
       
       boolean ifsave = objOrderManager.saveOrder(order, orderT);
       
@@ -523,45 +475,12 @@ class ButtonHandler implements ActionListener {
         double dblTax = 0.0;
         double dblSH = 0.0;
 
-        String strOrderAmount = "0.0";
-        String strTax = "0.0";
-        String strSH = "0.0";
-
-        int orderT = 0;
-
-        if(builderEdit instanceof CalOrderBuilder){
-            strOrderAmount = orderData[0];
-            strTax = orderData[1];
-            orderT = 1;
-        }else if(builderEdit instanceof ColombianOrderBuilder){
-            strOrderAmount = orderData[0];
-            strSH = orderData[1];
-            orderT = 2;
-        }else if(builderEdit instanceof OverseasOrderBuilder){
-            strOrderAmount = orderData[0];
-            strSH = orderData[1];
-            orderT = 3;
-        }else if(builderEdit instanceof NonCalOrderBuilder){
-            strOrderAmount = orderData[0];
-            orderT = 4;
-        }
-        
-        dblOrderAmount =
-          new Double(strOrderAmount).doubleValue();
-        dblTax = new Double(strTax).doubleValue();
-        dblSH = new Double(strSH).doubleValue();
-
-          System.out.println("-----------------------");
-          System.out.println(dblOrderAmount);
-          System.out.println(dblTax);
-          System.out.println(dblSH);
-          System.out.println("-----------------------");
+        double[] date = getOrder(builderEdit);
 
         //Create the order
-        Order order = createOrder(orderType, dblOrderAmount,
-                      dblTax, dblSH);
+        Order order = createOrder(orderType, date[0],
+                      date[1], date[2]);
         try {
-            System.out.println("POSSSS : "+ posOrder[0]);
             orderHistory.editOrder(order,Integer.parseInt(posOrder[0])-1);
         } catch (Exception ex) {
             Logger.getLogger(ButtonHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -631,12 +550,73 @@ class ButtonHandler implements ActionListener {
     }
     return null;
   }
-
+  
   public ButtonHandler() {
   }
   public ButtonHandler(OrderManager inObjOrderManager) {
     objOrderManager = inObjOrderManager;
   }
+  
+  public void assignBuilder(String order,ActionEvent e){
+    BuilderFactory factory = new BuilderFactory();
+    //create an appropriate builder instance
+    builderCreate = factory.getUIBuilder(order);
+    //configure the director with the builder
+    UIOrderDirector director = new UIOrderDirector(builderCreate);
+    //director invokes different builder
+    // methods
+    director.build();
+    //get the final build object
+    JPanel UIObj = builderCreate.getSearchUI();
+    if(e.getSource() == objOrderManager.getCmbOrderType()){
+        objOrderManager.displayNewUI(UIObj);
+    }
+  }
+public double[] getOrder(UIOrderBuilder ob){
+      double dblOrderAmount = 0.0;
+      double dblTax = 0.0;
+      double dblSH = 0.0;
+      
+      String strOrderAmount = "0.0";
+      String strTax = "0.0";
+      String strSH = "0.0";
+      String[] orderData = ob.getOrder();
+      
+      if(ob instanceof CalOrderBuilder){
+          strOrderAmount = orderData[0];
+          strTax = orderData[1];
+          orderT = 1;
+      }else if(ob instanceof ColombianOrderBuilder){
+          strOrderAmount = orderData[0];
+          strSH = orderData[1];
+          orderT = 2;
+      }else if(ob instanceof OverseasOrderBuilder){
+          strOrderAmount = orderData[0];
+          strSH = orderData[1];
+          orderT = 3;
+      }else if(ob instanceof NonCalOrderBuilder){
+          strOrderAmount = orderData[0];
+          orderT = 4;
+      }
+
+      dblOrderAmount =
+        new Double(strOrderAmount).doubleValue();
+      dblTax = new Double(strTax).doubleValue();
+      dblSH = new Double(strSH).doubleValue();
+      
+        System.out.println("-----------------------");
+        System.out.println(dblOrderAmount);
+        System.out.println(dblTax);
+        System.out.println(dblSH);
+        System.out.println("-----------------------");
+        
+        double[] dates = new double[3];
+        dates[0] = dblOrderAmount;
+        dates[1] = dblTax;
+        dates[2] = dblSH;
+        return dates;
+    
+}
 
     public String[] getPosOrder() {
         return posOrder;
