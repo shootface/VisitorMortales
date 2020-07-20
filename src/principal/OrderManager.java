@@ -236,7 +236,7 @@ public class OrderManager extends JFrame {
     gridbagEditOrder.setConstraints(editOrderButton, gbcEO);
     
     gbcEO.gridx = 1;
-    gbcEO.gridy = 2;
+    gbcEO.gridy = 3;
     gridbagEditOrder.setConstraints(exitButtonEdit, gbcEO);
     
     //****************************************************
