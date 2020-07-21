@@ -393,34 +393,31 @@ class ButtonHandler implements ActionListener {
   
   public void actionPerformed(ActionEvent e) {
     String totalResult = null;
-    
+    String orderType = "";
     
     if (e.getActionCommand().equals(OrderManager.EXIT)) {
       System.exit(1);
-    }
-    
-    if (e.getSource() instanceof JComboBox) {
-        String order = "";
-            if(e.getSource() == objOrderManager.getCmbOrderType()){
-                order = objOrderManager.getOrderType();
-                if (order.equals("") == false) {
-                    assignBuilder(order, e);
-            }
-        }else if(e.getSource() == objOrderManager.getCmbOrderTypeHistory()){
-            order = objOrderManager.getOrderHistory();
+    }  
+    if(e.getSource() == objOrderManager.getCmbOrderType()){
+        orderType = objOrderManager.getOrderType();
+        if (orderType.equals("") == false) {
+            assignBuilder(orderType, e);
+        }
+    if(e.getSource() == objOrderManager.getCmbOrderTypeHistory()){
+            orderType = objOrderManager.getOrderHistory();
             objOrderManager.getpOrderCriteriaHistory().removeAll();
             objOrderManager.getpOrderCriteriaHistory().validate();
-            objOrderManager.listOrderHistory(order,this);
-            if (order.equals("") == false) {
-                assignBuilder(order, e);
+            objOrderManager.listOrderHistory(orderType,this);
+            if (orderType.equals("") == false) {
+                assignBuilder(orderType, e);
              }
-            System.out.println(objOrderManager.getHistory(order).getTotal());
+            System.out.println(objOrderManager.getHistory(orderType).getTotal());
         }
-    }
+    
     
     if (e.getActionCommand().equals(OrderManager.CREATE_ORDER)) {
       //get input values
-      String orderType = objOrderManager.getOrderType();
+      orderType = objOrderManager.getOrderType();
       String[] orderData = builderCreate.getOrder();
 
       
@@ -469,7 +466,7 @@ class ButtonHandler implements ActionListener {
     }else if (e.getActionCommand().equals(OrderManager.EDIT_ORDER)) {
         OrderComponent orderHistory = objOrderManager.getHistory(objOrderManager.getOrderHistory());
         String[] orderData = builderEdit.getOrder();
-        String orderType = objOrderManager.getOrderHistory();
+        orderType = objOrderManager.getOrderHistory();
 
         double dblOrderAmount = 0.0;
         double dblTax = 0.0;
@@ -533,19 +530,20 @@ class ButtonHandler implements ActionListener {
             }
         }
     }
+    }
   }
 
-  public Order createOrder(String orderType,double orderAmount, double tax, double SH) {
-    if (orderType.equalsIgnoreCase(OrderManager.CA_ORDER)) {
+  public Order createOrder(String orderT,double orderAmount, double tax, double SH) {
+    if (orderT.equalsIgnoreCase(OrderManager.CA_ORDER)) {
       return new CaliforniaOrder(orderAmount, tax);
     }
-    if (orderType.equalsIgnoreCase(OrderManager.NON_CA_ORDER)) {
+    if (orderT.equalsIgnoreCase(OrderManager.NON_CA_ORDER)) {
       return new NonCaliforniaOrder(orderAmount);
     }
-    if (orderType.equalsIgnoreCase(OrderManager.OVERSEAS_ORDER)) {
+    if (orderT.equalsIgnoreCase(OrderManager.OVERSEAS_ORDER)) {
       return new OverseasOrder(orderAmount, SH);
     }
-    if(orderType.equalsIgnoreCase(OrderManager.CO_ORDER)){
+    if(orderT.equalsIgnoreCase(OrderManager.CO_ORDER)){
         return new ColombiaOrder(orderAmount, SH);
     }
     return null;
