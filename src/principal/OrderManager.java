@@ -317,7 +317,7 @@ public class OrderManager extends JFrame {
         while (orderIter.hasNext()){
                 i++;
                 Order c = (Order) orderIter.next();
-                System.out.println(c.getTotal()+"hola");
+                //System.out.println(c.getTotal()+"hola");
                 JButton order = new JButton(i+"-"+c.getTotal());
 
                 order.addActionListener(objButtonHandler);
@@ -410,10 +410,6 @@ class ButtonHandler implements ActionListener {
             orderType = objOrderManager.getOrderHistory();
             objOrderManager.updateCriteria();
             objOrderManager.listOrderHistory(orderType,this);
-            if (orderType.equals("") == false) {
-                assignBuilder(orderType, e);
-             }
-            System.out.println(objOrderManager.getHistory(orderType).getTotal());
         }
     
     
@@ -568,9 +564,7 @@ class ButtonHandler implements ActionListener {
     director.build();
     //get the final build object
     JPanel UIObj = builderCreate.getSearchUI();
-    if(e.getSource() == objOrderManager.getCmbOrderType()){
-        objOrderManager.displayNewUI(UIObj);
-    }
+    objOrderManager.displayNewUI(UIObj);
   }
 public double[] getOrder(UIOrderBuilder ob){
       double dblOrderAmount = 0.0;
