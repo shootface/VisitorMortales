@@ -327,9 +327,10 @@ public class OrderManager extends JFrame {
       validate();
   }
 
-    public JPanel getpOrderCriteriaHistory() {
-        return pOrderCriteriaHistory;
-    }
+  public void updateCriteria(){
+      pOrderCriteriaHistory.removeAll();
+      pOrderCriteriaHistory.validate();
+  }
   
   
   public static void main(String[] args) {
@@ -394,6 +395,7 @@ class ButtonHandler implements ActionListener {
   public void actionPerformed(ActionEvent e) {
     String totalResult = null;
     String orderType = "";
+      System.out.println("HHHH");
     
     if (e.getActionCommand().equals(OrderManager.EXIT)) {
       System.exit(1);
@@ -403,10 +405,10 @@ class ButtonHandler implements ActionListener {
         if (orderType.equals("") == false) {
             assignBuilder(orderType, e);
         }
+    }
     if(e.getSource() == objOrderManager.getCmbOrderTypeHistory()){
             orderType = objOrderManager.getOrderHistory();
-            objOrderManager.getpOrderCriteriaHistory().removeAll();
-            objOrderManager.getpOrderCriteriaHistory().validate();
+            objOrderManager.updateCriteria();
             objOrderManager.listOrderHistory(orderType,this);
             if (orderType.equals("") == false) {
                 assignBuilder(orderType, e);
@@ -417,6 +419,7 @@ class ButtonHandler implements ActionListener {
     
     if (e.getActionCommand().equals(OrderManager.CREATE_ORDER)) {
       //get input values
+        System.out.println("HOLLLA");
       orderType = objOrderManager.getOrderType();
       String[] orderData = builderCreate.getOrder();
 
@@ -529,7 +532,6 @@ class ButtonHandler implements ActionListener {
                 
             }
         }
-    }
     }
   }
 
