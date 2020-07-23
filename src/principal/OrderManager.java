@@ -395,7 +395,6 @@ class ButtonHandler implements ActionListener {
   public void actionPerformed(ActionEvent e) {
     String totalResult = null;
     String orderType = "";
-      System.out.println("HHHH");
     
     if (e.getActionCommand().equals(OrderManager.EXIT)) {
       System.exit(1);
@@ -415,7 +414,6 @@ class ButtonHandler implements ActionListener {
     
     if (e.getActionCommand().equals(OrderManager.CREATE_ORDER)) {
       //get input values
-        System.out.println("HOLLLA");
       orderType = objOrderManager.getOrderType();
       String[] orderData = builderCreate.getOrder();
 
@@ -498,7 +496,6 @@ class ButtonHandler implements ActionListener {
                 // methods
                 director.build();
                 //get the final build object
-                System.out.println("cambio");
                 
                 JPanel UIObj = builderEdit.getSearchUI();
                 
